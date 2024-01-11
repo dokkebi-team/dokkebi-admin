@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/client"
+}
+
+generator pothos {
+  provider     = "prisma-pothos-types"
+  clientOutput = "../client"
+  output       = "../src/generated/pothos/prisma-pothos-types.ts"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("PRISMA_DATABASE_URL")
+  directUrl = env("DIRECT_DATABASE_URL")
+}
+
+model Mob {
+  id              Int      @id @default(autoincrement())
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  alias           String?  @db.VarChar(300)
+  inventoryNo     String   @unique @map("inventory_no") @db.VarChar(300)
+  location        String   @db.VarChar(300)
+  illustrationUrl String   @map("illustration_url") @db.VarChar(300)
+  photoUrl        String   @map("photo_url") @db.VarChar(300)
+  notes           String?  @db.Text
+  species         String   @db.VarChar(300)
+  type            String   @db.VarChar(300)
+  description     String?  @db.Text
+  size            String   @db.VarChar(300)
+  order           Int      @default(autoincrement())
+
+  @@map("mobs")
+}

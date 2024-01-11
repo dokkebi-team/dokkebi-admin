@@ -1,0 +1,11 @@
+{
+  "name": "dokkebi-admin",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {},
+  "devDependencies": {
+    "@types/node": "^20.11.7",
+    "eslint": "^8",
+    "typescript": "^5"
+  }
+}
