@@ -1,3 +1,4 @@
+import BreadCrumb from "@/components/Breadcrumb";
 import dynamic from "next/dynamic";
 
 const ResourcesTable = dynamic(() => import("./components/ResourcesTable"), {
@@ -5,19 +6,19 @@ const ResourcesTable = dynamic(() => import("./components/ResourcesTable"), {
   loading: () => <div>loading...</div>,
 });
 
+const breadcrumbItems = [{ title: "Resources", link: "/resources" }];
+
 export interface ResourcesPageProps {}
 
 const ResourcesPage = ({}: ResourcesPageProps) => {
   return (
     <>
-      <main className="h-screen overflow-hidden flex flex-col p-5">
-        <div className="flex-none mb-4">
-          <h1 className="text-lg font-bold">Resources</h1>
-        </div>
+      <div className="flex-1 overflow-hidden flex flex-col p-6 md:p-8">
+        <BreadCrumb items={breadcrumbItems} />
         <div className="flex-1">
           <ResourcesTable />
         </div>
-      </main>
+      </div>
       <div id="portal" />
     </>
   );

@@ -1,3 +1,3 @@
 export default function Home() {
-  return <main>main</main>;
+  return <div className="p-6 md:p-8">main</div>;
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { MessageDialogProvider } from "@/components/MessageDialog";
+import ThemeProvider from "@/components/ThemeToggle/ThemeProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
 
@@ -13,7 +14,9 @@ const AppProvider = ({ children }: AppProviderProps) => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <MessageDialogProvider>{children}</MessageDialogProvider>
+      <ThemeProvider>
+        <MessageDialogProvider>{children}</MessageDialogProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 };
