@@ -6,6 +6,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import useResizeObserver from "@/libs/use-resize-observer";
+import { getModCharacter } from "@/utils/character";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import {
   BrushTool,
@@ -247,16 +248,34 @@ const DotEditor = forwardRef(
             }}
           >
             <div className="flex items-center space-x-0.5 rounded-md border bg-background p-1 shadow-sm">
-              <RadioGroupPrimitive.Item value={BrushTool.DOT} asChild>
-                <button className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 data-[state=checked]:bg-accent-foreground data-[state=checked]:text-accent border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground p-1">
-                  <BrushIcon size={20} />
-                </button>
-              </RadioGroupPrimitive.Item>
-              <RadioGroupPrimitive.Item value={BrushTool.ERASER} asChild>
-                <button className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 data-[state=checked]:bg-accent-foreground data-[state=checked]:text-accent border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground p-1">
-                  <EraserIcon size={20} />
-                </button>
-              </RadioGroupPrimitive.Item>
+              <Tooltip>
+                <TooltipTrigger onClick={(e) => e.preventDefault()}>
+                  <RadioGroupPrimitive.Item value={BrushTool.DOT} asChild>
+                    <button className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 data-[state=checked]:bg-accent-foreground data-[state=checked]:text-accent border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground p-1">
+                      <BrushIcon size={20} />
+                    </button>
+                  </RadioGroupPrimitive.Item>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>
+                    <kbd>D</kbd>
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger onClick={(e) => e.preventDefault()}>
+                  <RadioGroupPrimitive.Item value={BrushTool.ERASER} asChild>
+                    <button className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 data-[state=checked]:bg-accent-foreground data-[state=checked]:text-accent border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground p-1">
+                      <EraserIcon size={20} />
+                    </button>
+                  </RadioGroupPrimitive.Item>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>
+                    <kbd>E</kbd>
+                  </p>
+                </TooltipContent>
+              </Tooltip>
               <div className="px-2">
                 <div className="w-[2px] bg-input h-5" />
               </div>
@@ -273,22 +292,40 @@ const DotEditor = forwardRef(
               <div className="px-2">
                 <div className="w-[2px] bg-input h-5" />
               </div>
-              <button
-                className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground p-1"
-                onClick={undo}
-              >
-                <UndoIcon size={20} />
-              </button>
-              <button
-                className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground p-1"
-                onClick={redo}
-              >
-                <RedoIcon size={20} />
-              </button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground p-1"
+                    onClick={undo}
+                  >
+                    <UndoIcon size={20} />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>
+                    <kbd>{getModCharacter()}</kbd>+<kbd>Z</kbd>
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground p-1"
+                    onClick={redo}
+                  >
+                    <RedoIcon size={20} />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>
+                    <kbd>{getModCharacter()}</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd>
+                  </p>
+                </TooltipContent>
+              </Tooltip>
               <div className="px-2">
                 <div className="w-[2px] bg-input h-5" />
               </div>
-              <Tooltip open={false}>
+              <Tooltip>
                 <TooltipTrigger>
                   <SaveButton
                     isSaving={isSaving}
@@ -296,8 +333,10 @@ const DotEditor = forwardRef(
                     onClick={handleSave}
                   />
                 </TooltipTrigger>
-                <TooltipContent hideWhenDetached>
-                  <p>저장하세요.</p>
+                <TooltipContent>
+                  <p>
+                    <kbd>{getModCharacter()}</kbd>+<kbd>S</kbd>
+                  </p>
                 </TooltipContent>
               </Tooltip>
             </div>
