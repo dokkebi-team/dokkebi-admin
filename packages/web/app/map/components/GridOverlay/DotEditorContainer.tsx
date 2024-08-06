@@ -40,6 +40,9 @@ const DotEditorContainer = ({}: DotEditorContainerProps) => {
 
       return data;
     },
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
   });
   const mapMutation = useMutation({
     mutationKey: ["barrierMapData"],

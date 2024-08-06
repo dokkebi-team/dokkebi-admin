@@ -44,7 +44,7 @@ export interface DotEditorProps {
 }
 
 const DotEditor = forwardRef(
-  ({ data, rows, cols, imageUrl, onSave }: DotEditorProps) => {
+  ({ data, rows, cols, imageUrl, onSave }: DotEditorProps, ref) => {
     const layerData = useMemo(() => {
       return data.map((row, rowIndex) =>
         row.map((value, columnIndex) => ({
@@ -195,10 +195,9 @@ const DotEditor = forwardRef(
     }, []);
 
     useEffect(() => {
-      clear();
       colorPixels(layerData.flat());
       setIsDirty(false);
-    }, [clear, colorPixels, layerData]);
+    }, [colorPixels, layerData]);
 
     useHotkeys("d", () => {
       setBrushTool(BrushTool.DOT);
