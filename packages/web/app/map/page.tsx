@@ -1,5 +1,6 @@
 import BreadCrumb from "@/components/Breadcrumb";
-import DotEditorContainer from "./components/GridOverlay/DotEditorContainer";
+import { Suspense } from "react";
+import MapContainer from "./components/MapContainer";
 
 const breadcrumbItems = [{ title: "Map", link: "/map" }];
 
@@ -8,7 +9,9 @@ const MapPage = async () => {
     <div className="flex-1 overflow-hidden flex flex-col p-6 md:p-8">
       <BreadCrumb items={breadcrumbItems} />
 
-      <DotEditorContainer />
+      <Suspense>
+        <MapContainer />
+      </Suspense>
     </div>
   );
 };
