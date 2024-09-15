@@ -2,12 +2,19 @@
 
 import { getUrlOrigin } from "@/app/resources/components/ResourcesTable";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Tooltip,
   TooltipContent,
@@ -30,6 +37,7 @@ import {
   TransformComponent,
   TransformWrapper,
 } from "react-zoom-pan-pinch";
+import MobCollisionEditor from "./MobCollisionEditor";
 
 const round = (value: number, digits = 0) => {
   const pow = Math.pow(10, digits);
@@ -60,6 +68,7 @@ const MobsContainer = ({}: MobsContainerProps) => {
             x: number;
             y: number;
             scale: number;
+            collisionConfig: number[][];
           }
         >
       >();
@@ -76,6 +85,7 @@ const MobsContainer = ({}: MobsContainerProps) => {
           x: number;
           y: number;
           scale: number;
+          collisionConfig: number[][];
         }
       >
     ) => {
@@ -104,7 +114,10 @@ const MobsContainer = ({}: MobsContainerProps) => {
     [data, currentMobInventoryNo]
   );
   const [mobsData, setMobsData] = useState<
-    Record<string, { x: number; y: number; scale: number }>
+    Record<
+      string,
+      { x: number; y: number; scale: number; collisionConfig: number[][] }
+    >
   >({});
   const isCurrentMobPlaced = useMemo(
     () => !!mobsData[currentMobInventoryNo],
@@ -134,6 +147,16 @@ const MobsContainer = ({}: MobsContainerProps) => {
       setIsSaving(false);
       setDisableInteraction(false);
     }
+  };
+
+  const handleSaveCollisionConfig = async (value: number[][]) => {
+    await mobsPositionMutation.mutateAsync({
+      ...mobsData,
+      [currentMobInventoryNo]: {
+        ...mobsData[currentMobInventoryNo],
+        collisionConfig: value,
+      },
+    });
   };
 
   useEffect(() => {
@@ -216,7 +239,12 @@ const MobsContainer = ({}: MobsContainerProps) => {
 
                 setMobsData((prev) => ({
                   ...prev,
-                  [currentMobInventoryNo]: { x, y, scale: 1 },
+                  [currentMobInventoryNo]: {
+                    ...prev[currentMobInventoryNo],
+                    x,
+                    y,
+                    scale: 1,
+                  },
                 }));
               }}
               onMouseMove={(e) => {
@@ -282,9 +310,9 @@ const MobsContainer = ({}: MobsContainerProps) => {
                         setMobsData((prev) => ({
                           ...prev,
                           [inventoryNo]: {
+                            ...prev[inventoryNo],
                             x,
                             y,
-                            scale: prev[inventoryNo].scale,
                           },
                         }));
                       }}
@@ -292,8 +320,7 @@ const MobsContainer = ({}: MobsContainerProps) => {
                         setMobsData((prev) => ({
                           ...prev,
                           [inventoryNo]: {
-                            x: prev[inventoryNo].x,
-                            y: prev[inventoryNo].y,
+                            ...prev[inventoryNo],
                             scale,
                           },
                         }));
@@ -314,6 +341,45 @@ const MobsContainer = ({}: MobsContainerProps) => {
         </TransformWrapper>
         <div className="absolute bottom-4 left-1/2 translate-x-[-50%]">
           <div className="flex items-center space-x-0.5 rounded-md border bg-background p-1 shadow-sm">
+            <Select
+              value={currentMobInventoryNo}
+              onValueChange={setCurrentMobInventoryNo}
+            >
+              <SelectTrigger className="w-[6rem] h-[1.875rem]">
+                <SelectValue placeholder="도깨비 선택" />
+              </SelectTrigger>
+
+              <SelectContent>
+                {data.map((mob) => {
+                  return (
+                    <SelectItem key={mob.inventoryNo} value={mob.inventoryNo}>
+                      {mob.inventoryNo}
+                    </SelectItem>
+                  );
+                })}
+              </SelectContent>
+            </Select>
+            <Dialog>
+              <DialogTrigger asChild>
+                <button className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground p-1">
+                  통과 여부 설정
+                </button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>통과 여부 설정</DialogHeader>
+
+                {currentMob?.illustrationUrl &&
+                  mobsData[currentMobInventoryNo] && (
+                    <MobCollisionEditor
+                      mobImgUrl={currentMob.illustrationUrl}
+                      collisionConfig={
+                        mobsData[currentMobInventoryNo].collisionConfig
+                      }
+                      onSave={handleSaveCollisionConfig}
+                    />
+                  )}
+              </DialogContent>
+            </Dialog>
             <Tooltip>
               <TooltipTrigger>
                 <SaveButton
@@ -340,9 +406,22 @@ interface MobProps {
 }
 
 const Mob = forwardRef<HTMLDivElement, MobProps>(({ mob }, ref) => {
+  const [isLoadingComplete, setIsLoadingComplete] = useState(false);
+
   return (
     <div className="h-[128px] w-[128px]" ref={ref}>
-      <Image src={mob.illustrationUrl} width={256} height={256} alt="" />
+      {!isLoadingComplete && (
+        <Skeleton className="absolute left-0 right-0 top-0 bottom-0" />
+      )}
+      <Image
+        src={mob.illustrationUrl}
+        width={256}
+        height={256}
+        alt=""
+        onLoadingComplete={() => {
+          setIsLoadingComplete(true);
+        }}
+      />
     </div>
   );
 });

@@ -16,6 +16,7 @@ const UpdateMapInputSchema = z.object({
       x: z.number(),
       y: z.number(),
       scale: z.number(),
+      collisionConfig: z.array(z.array(z.number())),
     })
   ),
 });
