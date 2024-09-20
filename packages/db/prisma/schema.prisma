@@ -16,20 +16,20 @@ datasource db {
 }
 
 model Mob {
-  id              Int      @id @default(autoincrement())
-  createdAt       DateTime @default(now()) @map("created_at")
-  updatedAt       DateTime @updatedAt @map("updated_at")
-  alias           String?  @db.VarChar(300)
-  inventoryNo     String   @unique @map("inventory_no") @db.VarChar(300)
-  location        String   @db.VarChar(300)
-  illustrationUrl String   @map("illustration_url") @db.VarChar(300)
-  photoUrl        String   @map("photo_url") @db.VarChar(300)
-  notes           String?  @db.Text
-  species         String   @db.VarChar(300)
-  type            String   @db.VarChar(300)
-  description     String?  @db.Text
-  size            String   @db.VarChar(300)
-  order           Int      @default(autoincrement())
+  id                       Int      @id @default(autoincrement())
+  createdAt                DateTime @default(now()) @map("created_at")
+  updatedAt                DateTime @updatedAt @map("updated_at")
+  name                     String   @db.VarChar(300)
+  inventoryNo              String   @unique @map("inventory_no") @db.VarChar(300)
+  regionId                 String   @map("region_id") @db.VarChar(300)
+  regionName               String   @map("region_name") @db.VarChar(300)
+  illustrationUrl          String   @map("illustration_url") @db.VarChar(300)
+  optimizedIllustrationUrl String   @map("optimized_illustration_url") @db.VarChar(300)
+  notes                    String?  @db.Text
+  type                     String   @db.VarChar(300) // 종족
+  size                     String   @db.VarChar(300) // 크기
+  rank                     String   @db.VarChar(300) // Rank
+  order                    Int      @default(autoincrement())
 
   @@map("mobs")
 }

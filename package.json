@@ -1,5 +1,5 @@
 {
-  "name": "dokkebi-admin",
+  "name": "dokkebi-world",
   "version": "0.1.0",
   "private": true,
   "scripts": {},
@@ -7,5 +7,29 @@
     "@types/node": "^20.11.7",
     "eslint": "^8",
     "typescript": "^5"
+  },
+  "pnpm": {
+    "packageExtensions": {
+      "@pixi/react": {
+        "peerDependencies": {
+          "@pixi/app": ">=7",
+          "@pixi/constants": ">=7",
+          "@pixi/core": ">=7",
+          "@pixi/display": ">=7",
+          "@pixi/extensions": ">=7",
+          "@pixi/graphics": ">=7",
+          "@pixi/math": ">=7",
+          "@pixi/mesh": ">=7",
+          "@pixi/mesh-extras": ">=7",
+          "@pixi/particle-container": ">=7",
+          "@pixi/sprite": ">=7",
+          "@pixi/sprite-animated": ">=7",
+          "@pixi/sprite-tiling": ">=7",
+          "@pixi/text": ">=7",
+          "@pixi/text-bitmap": ">=7",
+          "@pixi/ticker": ">=7"
+        }
+      }
+    }
   }
 }

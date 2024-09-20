@@ -1,3 +1,9 @@
-export default function Home() {
-  return <div className="p-6 md:p-8">main</div>;
+import Main from '@/components/Main'
+
+export interface IndexPageProps {}
+
+const IndexPage = ({}: IndexPageProps) => {
+  return <Main />
 }
+
+export default IndexPage

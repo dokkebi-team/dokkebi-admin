@@ -1,1 +1,1 @@
-# @dokkebi-admin/db
+# @dokkebi-world/db
