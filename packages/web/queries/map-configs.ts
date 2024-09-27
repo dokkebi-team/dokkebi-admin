@@ -1,4 +1,4 @@
-import { OFFSET, WORLD_HEIGHT, WORLD_WIDTH } from "@/constants";
+import { WORLD_HEIGHT, WORLD_WIDTH } from "@/constants";
 import { api } from "@/modules/api";
 import { BoundaryItem, MobConfig } from "@/types";
 import { PrismaDBMainTypes } from "@dokkebi-world/db";
@@ -30,8 +30,8 @@ export const useMapConfigsQuery = () => {
             if (value === 1) {
               boundaryData.push({
                 position: {
-                  x: j * tileWidth - OFFSET.x,
-                  y: i * tileHeight - OFFSET.y,
+                  x: j * tileWidth,
+                  y: i * tileHeight,
                 },
                 width: tileWidth,
                 height: tileHeight,

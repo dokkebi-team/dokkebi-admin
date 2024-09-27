@@ -4,6 +4,7 @@ import { Viewport as PixiViewport } from "pixi-viewport";
 import * as PIXI from "pixi.js";
 import React, { useRef } from "react";
 import { useMounted } from "../hooks/useMounted";
+import { useStageSize } from "./StageSizeProvider";
 
 export interface CameraProps {
   children: React.ReactNode;
@@ -11,6 +12,7 @@ export interface CameraProps {
 
 const Camera = ({ children }: CameraProps) => {
   const isMounted = useMounted();
+  const size = useStageSize();
 
   const app = useApp();
   const viewportRef = useRef<PixiViewport>(null);
@@ -30,8 +32,8 @@ const Camera = ({ children }: CameraProps) => {
   if (isMounted) {
     return (
       <Viewport
-        screenWidth={app.view.width}
-        screenHeight={app.view.height}
+        screenWidth={size.width}
+        screenHeight={size.height}
         worldHeight={WORLD_HEIGHT}
         worldWidth={WORLD_WIDTH}
         eventSystem={app.renderer.events}

@@ -1,12 +1,16 @@
-import { OFFSET, PLAYER_SIZE, WORLD_HEIGHT, WORLD_WIDTH } from "@/constants";
+import { PLAYER_SIZE, WORLD_HEIGHT, WORLD_WIDTH } from "@/constants";
 import { useMapConfigs } from "@/contexts/map-configs";
 import { useKeyControl } from "@/hooks/useKeyControl";
 import { useSpritesheet } from "@/hooks/useSpritesheet";
-import { playerAtom, selectedVideoIndexAtom } from "@/stores";
+import {
+  mobileKeyControlsAtom,
+  playerAtom,
+  selectedVideoIndexAtom,
+} from "@/stores";
 import { BoundaryItem } from "@/types";
 import { rectangularCollision } from "@/utils/common";
 import { Sprite, useTick } from "@pixi/react";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { Resource, Texture } from "pixi.js";
 import { useEffect, useRef, useState } from "react";
 import { useCamera } from "./Camera";
@@ -83,7 +87,9 @@ export interface PlayerProps {
 export const Player = ({ isPlaying }: PlayerProps) => {
   const { boundaryData } = useMapConfigs();
   const prevWatchedVideoIndexRef = useRef<number>();
+  // const app = useApp();
   const size = useStageSize();
+  // const size = { width: app.view.width, height: app.view.height };
   const [selectedVideoIndex, setSelectedVideoIndex] = useAtom(
     selectedVideoIndexAtom,
   );
@@ -112,6 +118,7 @@ export const Player = ({ isPlaying }: PlayerProps) => {
   const downKeyControl = useKeyControl("ArrowDown");
   const leftKeyControl = useKeyControl("ArrowLeft");
   const rightKeyControl = useKeyControl("ArrowRight");
+  const mobileKeyControls = useAtomValue(mobileKeyControlsAtom);
   const { moveViewport } = useCamera();
   const [player, setPlayer] = useAtom(playerAtom);
   const spritesMap: { [key in PlayerDirection]: Texture<Resource>[] } = {
@@ -147,17 +154,21 @@ export const Player = ({ isPlaying }: PlayerProps) => {
 
     let velocity = { x: 0, y: 0 };
     let direction = player.state.direction;
+    const isUp = upKeyControl.isDown || mobileKeyControls.up;
+    const isDown = downKeyControl.isDown || mobileKeyControls.down;
+    const isLeft = leftKeyControl.isDown || mobileKeyControls.left;
+    const isRight = rightKeyControl.isDown || mobileKeyControls.right;
 
-    if (upKeyControl.isDown) {
+    if (isUp) {
       velocity.y -= 1;
       direction = "up";
-    } else if (downKeyControl.isDown) {
+    } else if (isDown) {
       velocity.y += 1;
       direction = "down";
-    } else if (leftKeyControl.isDown) {
+    } else if (isLeft) {
       velocity.x -= 1;
       direction = "left";
-    } else if (rightKeyControl.isDown) {
+    } else if (isRight) {
       velocity.x += 1;
       direction = "right";
     }
@@ -190,16 +201,12 @@ export const Player = ({ isPlaying }: PlayerProps) => {
       }));
 
       const viewportPositionOffsetX =
-        Math.min(
-          WORLD_WIDTH - (nextPosition.x + OFFSET.x) - size.width / 2,
-          0,
-        ) + Math.max(0, size.width / 2 - (nextPosition.x + OFFSET.x));
+        Math.min(WORLD_WIDTH - nextPosition.x - size.width / 2, 0) +
+        Math.max(0, size.width / 2 - nextPosition.x);
 
       const viewportPositionOffsetY =
-        Math.min(
-          WORLD_HEIGHT - (nextPosition.y + OFFSET.y) - size.height / 2,
-          0,
-        ) + Math.max(0, size.height / 2 - (nextPosition.y + OFFSET.y));
+        Math.min(WORLD_HEIGHT - nextPosition.y - size.height / 2, 0) +
+        Math.max(0, size.height / 2 - nextPosition.y);
 
       moveViewport({
         x: nextPosition.x + viewportPositionOffsetX,
@@ -214,12 +221,7 @@ export const Player = ({ isPlaying }: PlayerProps) => {
       }));
     }
 
-    if (
-      !upKeyControl.isDown &&
-      !downKeyControl.isDown &&
-      !leftKeyControl.isDown &&
-      !rightKeyControl.isDown
-    ) {
+    if (!isUp && !isDown && !isLeft && !isRight) {
       setPlayer((prev) => ({
         ...prev,
         state: {
@@ -240,8 +242,8 @@ export const Player = ({ isPlaying }: PlayerProps) => {
         texture={currentSprite}
         anchor={[0.5, 1]}
         scale={1.1}
-        x={player.position.x - size.width / 2}
-        y={player.position.y - size.height / 2}
+        x={player.position.x}
+        y={player.position.y}
         zIndex={2}
       />
     </>

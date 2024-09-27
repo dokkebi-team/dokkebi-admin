@@ -1,10 +1,9 @@
 "use client";
 
-import { OFFSET } from "@/constants";
 import { MapConfigsContext, MapConfigsProvider } from "@/contexts/map-configs";
 import { useContextBridge } from "@/hooks/useContextBridge";
 import { useMapConfigsQuery } from "@/queries/map-configs";
-import { Container, Sprite, Stage, useApp } from "@pixi/react";
+import { Container, Sprite, Stage } from "@pixi/react";
 import * as PIXI from "pixi.js";
 import React, {
   useEffect,
@@ -18,7 +17,7 @@ import BackgroundSoundProvider, {
 } from "./BackgroundSoundProvider";
 import Bang, { BangRef } from "./Bang";
 import Camera from "./Camera";
-import MobInfoDialog from "./MobInfoDialog2";
+import MobInfoDialog from "./MobInfoDialog";
 import Mobs from "./Mobs";
 import Player from "./Player";
 import ResourceLoader from "./ResourceLoader";
@@ -122,17 +121,14 @@ interface StateContainerProps {
 
 const StateContainer = ({ children }: StateContainerProps) => {
   const size = useStageSize();
-  const StageSizeContextBridge = useContextBridge(StageSizeContext);
-  const MapConfigsContextBridge = useContextBridge(MapConfigsContext);
+  const ContextBridge = useContextBridge(StageSizeContext, MapConfigsContext);
 
   return (
     <>
       <Stage {...size} options={{ backgroundColor: 0x005ed0 }}>
-        <MapConfigsContextBridge>
-          <StageSizeContextBridge>
-            <BackgroundSoundProvider>{children}</BackgroundSoundProvider>
-          </StageSizeContextBridge>
-        </MapConfigsContextBridge>
+        <ContextBridge>
+          <BackgroundSoundProvider>{children}</BackgroundSoundProvider>
+        </ContextBridge>
       </Stage>
       {/*<MobsHelper />*/}
     </>
@@ -146,15 +142,12 @@ interface ParkProps {
 }
 
 const Park = ({ isPlaying, playSound, onSelectMob }: ParkProps) => {
-  const app = useApp();
+  // const app = useApp();
   const size = useStageSize();
 
   return (
     <Container sortableChildren interactive>
-      <Container
-        position={[-size.width / 2 - OFFSET.x, -size.height / 2 - OFFSET.y]}
-        zIndex={0}
-      >
+      <Container zIndex={0}>
         <Map playSound={playSound} />
       </Container>
       {/*<Boundaries />*/}

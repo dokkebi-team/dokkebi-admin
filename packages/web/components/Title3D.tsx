@@ -1,22 +1,23 @@
 "use client";
 
-import { OrbitControls, Text3D } from "@react-three/drei";
+import { cn } from "@/utils/ui";
+import { Text3D } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import { Mesh } from "three";
 
 export interface Title3DProps {
   children: string;
+  className?: string;
 }
 
-const Title3D = ({ children }: Title3DProps) => {
+const Title3D = ({ children, className }: Title3DProps) => {
   return (
-    <div className="w-full">
-      <Canvas camera={{ position: [0, 0, 5] }}>
+    <div className={cn("w-full", className)}>
+      <Canvas camera={{ position: [0, 0, 8] }}>
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
         <RotatingText text={children} />
-        <OrbitControls enableZoom={false} />
       </Canvas>
     </div>
   );
@@ -39,7 +40,7 @@ const RotatingText = ({ text }: RotatingTextProps) => {
     <mesh ref={meshRef}>
       <Text3D
         font="/fonts/Pretendard_Regular.json"
-        size={1}
+        size={2}
         height={0.2}
         curveSegments={12}
         bevelEnabled

@@ -1,16 +1,17 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/utils/ui";
 import { motion } from "framer-motion";
 import { useState } from "react";
 
 interface FlipCardProps {
+  className?: string;
   frontContent: React.ReactNode;
   backContent: React.ReactNode;
 }
 
 export default function FlipCard(
-  { frontContent, backContent }: FlipCardProps = {
+  { frontContent, backContent, className }: FlipCardProps = {
     frontContent: "Front Content",
     backContent: "Back Content",
   },
@@ -23,8 +24,11 @@ export default function FlipCard(
 
   return (
     <div
-      className="perspective-1000 h-[400px] w-full cursor-pointer"
-      onClick={handleFlip}
+      className={cn("perspective-1000 cursor-pointer outline-none", className)}
+      onMouseDown={() => {
+        console.log("???");
+        handleFlip();
+      }}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           handleFlip();
@@ -40,16 +44,12 @@ export default function FlipCard(
         animate={{ rotateY: isFlipped ? 180 : 0 }}
         transition={{ duration: 0.6, ease: "easeInOut" }}
       >
-        <Card className="absolute h-full w-full [backface-visibility:hidden]">
-          <CardContent className="flex h-full items-center justify-center p-4">
-            {frontContent}
-          </CardContent>
-        </Card>
-        <Card className="absolute h-full w-full [backface-visibility:hidden] [transform:rotateY(180deg)]">
-          <CardContent className="flex h-full items-center justify-center p-4">
-            {backContent}
-          </CardContent>
-        </Card>
+        <div className="absolute z-[2] flex h-full w-full items-center justify-center overflow-hidden [-webkit-backface-visibility:hidden] [backface-visibility:hidden]">
+          {frontContent}
+        </div>
+        <div className="absolute flex h-full w-full justify-center overflow-hidden bg-white [-webkit-backface-visibility:hidden] [backface-visibility:hidden] [transform:rotateY(180deg)]">
+          {backContent}
+        </div>
       </motion.div>
     </div>
   );

@@ -10,12 +10,12 @@ export const getUrlOrigin = () => {
   } else if (isProd) {
     return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
   } else {
-    return `http://localhost:${process.env.PORT || "3000"}`;
+    return `http://192.168.123.121:${process.env.PORT || "3000"}`;
   }
 };
 
 const baseUrl = getUrlOrigin();
 
 export const api = ky.create({
-  prefixUrl: baseUrl,
+  // prefixUrl: baseUrl,
 });

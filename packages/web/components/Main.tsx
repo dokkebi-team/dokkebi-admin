@@ -10,9 +10,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useAtom, useAtomValue } from "jotai";
 import dynamic from "next/dynamic";
 import { Suspense, useRef, useState } from "react";
-import { useKey } from "react-use";
 import { AppRef } from "./App";
-import MobInfoDialog from "./MobInfoDialog";
+import Title3D from "./Title3D";
 import VideoFrame from "./VideoFrame";
 import WebUI from "./WebUI";
 
@@ -36,24 +35,6 @@ const Main = ({}: MainProps) => {
     isAppStarted && !showMobInfo && selectedVideoIndex === undefined;
   const showHeader = isAppStarted && !isPlaying;
 
-  useKey(
-    "Escape",
-    (e) => {
-      e.preventDefault();
-
-      if (selectedVideoIndex !== undefined) {
-        setSelectedVideoIndex(undefined);
-      }
-
-      if (showMobInfo) {
-        setSelectedMobId(undefined);
-        return;
-      }
-    },
-    undefined,
-    [showMobInfo, selectedVideoIndex],
-  );
-
   return (
     <QueryClientProvider client={queryClient}>
       <WebUI
@@ -66,6 +47,9 @@ const Main = ({}: MainProps) => {
         onMoveArchivePage={async () => {}}
       >
         <Suspense fallback={<div>Loading...</div>}>
+          <div className="pointer-events-none fixed left-0 top-0 opacity-0">
+            <Title3D>Dokkebi World</Title3D>
+          </div>
           <App
             isPlaying={isPlaying}
             playSound={playSound}
@@ -74,12 +58,6 @@ const Main = ({}: MainProps) => {
           />
         </Suspense>
       </WebUI>
-      <MobInfoDialog
-        selectedMobId={selectedMobId}
-        onClose={() => {
-          setSelectedMobId(undefined);
-        }}
-      />
       {selectedVideoIndex !== undefined && (
         <VideoFrame
           url={VIDEOS[selectedVideoIndex]}
