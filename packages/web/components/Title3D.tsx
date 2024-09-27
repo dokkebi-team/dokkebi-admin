@@ -38,7 +38,7 @@ const RotatingText = ({ text }: RotatingTextProps) => {
   return (
     <mesh ref={meshRef}>
       <Text3D
-        font="/fonts/Pretendard_Regular.json"
+        font={"/fonts/Pretendard_Regular.json"}
         size={1}
         height={0.2}
         curveSegments={12}

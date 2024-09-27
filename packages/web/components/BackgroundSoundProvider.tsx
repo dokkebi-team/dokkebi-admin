@@ -1,34 +1,36 @@
-import {sound} from '@pixi/sound'
-import React, {useEffect} from 'react'
+import { sound } from "@pixi/sound";
+import React, { useEffect } from "react";
 
 export interface BackgroundSoundProviderProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
-const BackgroundSoundProvider = ({children}: BackgroundSoundProviderProps) => {
+const BackgroundSoundProvider = ({
+  children,
+}: BackgroundSoundProviderProps) => {
   useEffect(() => {
-    const instance = sound.add('background', {
-      url: '/background_sound.mp3',
+    const instance = sound.add("background", {
+      url: "/background_sound.mp3",
       loop: true,
-    })
+    });
 
     return () => {
-      instance.destroy()
-    }
-  }, [])
+      instance.destroy();
+    };
+  }, []);
 
   const play = () => {
-    sound.stop('background')
-    sound.play('background')
-  }
+    sound.stop("background");
+    sound.play("background");
+  };
 
   const stop = () => {
-    sound.stop('background')
-  }
+    sound.stop("background");
+  };
 
   const pause = () => {
-    sound.pause('background')
-  }
+    sound.pause("background");
+  };
 
   return (
     <BackgroundSoundContext.Provider
@@ -40,25 +42,28 @@ const BackgroundSoundProvider = ({children}: BackgroundSoundProviderProps) => {
     >
       {children}
     </BackgroundSoundContext.Provider>
-  )
-}
+  );
+};
 
 export interface BackgroundSoundContextProps {
-  play: () => void
-  stop: () => void
-  pause: () => void
+  play: () => void;
+  stop: () => void;
+  pause: () => void;
 }
 
-export const BackgroundSoundContext = React.createContext<BackgroundSoundContextProps | null>(null)
+export const BackgroundSoundContext =
+  React.createContext<BackgroundSoundContextProps | null>(null);
 
 export const useBackgroundSound = () => {
-  const context = React.useContext(BackgroundSoundContext)
+  const context = React.useContext(BackgroundSoundContext);
 
   if (context === null) {
-    throw new Error('useBackgroundSound must be used within a BackgroundSoundProvider')
+    throw new Error(
+      "useBackgroundSound must be used within a BackgroundSoundProvider",
+    );
   }
 
-  return context
-}
+  return context;
+};
 
-export default BackgroundSoundProvider
+export default BackgroundSoundProvider;

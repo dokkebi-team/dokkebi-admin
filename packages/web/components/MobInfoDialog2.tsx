@@ -3,6 +3,7 @@ import Image from "next/image";
 import * as React from "react";
 import { useState } from "react";
 import FlipCard from "./FlipCard";
+import Title3D from "./Title3D";
 import { Dialog, DialogContent, DialogTitle } from "./ui/dialog";
 import { Skeleton } from "./ui/skeleton";
 
@@ -45,7 +46,7 @@ const MobInfoDialog = ({
           <FlipCard
             frontContent={
               <div className="flex flex-col items-center">
-                {/* <Title3D>{mob.name}</Title3D> */}
+                <Title3D>{mob.name}</Title3D>
                 <h2 className="mb-2 text-xl font-bold">{mob.name}</h2>
                 <div className="relative h-[240px] w-[240px]">
                   {!isLoadingComplete && (

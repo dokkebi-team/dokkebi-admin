@@ -264,6 +264,10 @@ const Mobs = ({ onSelectMob }: MobsProps) => {
         if (!mobConfig) {
           return null;
         }
+        const zIndex =
+          player.position.y + OFFSET.y > mobConfig.y + 20 * mobConfig.scale
+            ? 1
+            : 3;
 
         if (!mob.optimizedIllustrationUrl) {
           return null;
@@ -279,7 +283,7 @@ const Mobs = ({ onSelectMob }: MobsProps) => {
               height={128 * mobConfig.scale}
               x={mobConfig.x - size.width / 2 - OFFSET.x}
               y={mobConfig.y - size.height / 2 - OFFSET.y}
-              zIndex={1}
+              zIndex={zIndex}
               interactive
               pointerdown={() => handleSelectMob(mobIndex)}
               pointermove={() => {
