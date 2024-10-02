@@ -1,4 +1,15 @@
 import { useMapConfigs } from "@/contexts/map-configs";
+import animalImage from "@/public/symbols/animal.png";
+import castleImage from "@/public/symbols/castle.png";
+import dokkebiImage from "@/public/symbols/dokkebi.png";
+import eggImage from "@/public/symbols/egg.png";
+import godImage from "@/public/symbols/god.png";
+import pagodaImage from "@/public/symbols/pagoda.png";
+import plantImage from "@/public/symbols/plant.png";
+import soulImage from "@/public/symbols/soul.png";
+import spiritImage from "@/public/symbols/spirit.png";
+import stoneImage from "@/public/symbols/stone.png";
+import thingsImage from "@/public/symbols/things.png";
 import Image from "next/image";
 import * as React from "react";
 import { useState } from "react";
@@ -14,6 +25,7 @@ export interface MobInfoDialogProps
 }
 
 const SYMBOL_COUNT_BY_RANK = {
+  SS: 7,
   S: 6,
   A: 5,
   B: 4,
@@ -23,17 +35,17 @@ const SYMBOL_COUNT_BY_RANK = {
 };
 
 const SYMBOL_IMAGE_SOURCE_BY_TYPE = {
-  도깨비: "/symbols/dokkebi.png",
-  돌: "/symbols/stone.png",
-  동물: "/symbols/animal.png",
-  만물: "/symbols/things.png",
-  성: "/symbols/castle.png",
-  식물: "/symbols/plant.png",
-  신: "/symbols/god.png",
-  알: "/symbols/egg.png",
-  영혼: "/symbols/soul.png",
-  정령: "/symbols/spirit.png",
-  탑: "/symbols/pagoda.png",
+  도깨비: dokkebiImage,
+  돌: stoneImage,
+  동물: animalImage,
+  만물: thingsImage,
+  성: castleImage,
+  식물: plantImage,
+  신: godImage,
+  알: eggImage,
+  영혼: soulImage,
+  정령: spiritImage,
+  탑: pagodaImage,
 };
 
 const MobInfoDialog = ({
@@ -98,9 +110,9 @@ const MobInfoDialog = ({
                     }}
                   />
                 </div>
-                {/* <div className="absolute bottom-0 left-0 right-0 flex justify-center">
-                  <RankSymbols type="도깨비" rank="S" />
-                </div> */}
+                <div className="absolute bottom-[6%] left-0 right-0 flex justify-center">
+                  <RankSymbols type={mob.type} rank={mob.rank} />
+                </div>
               </div>
             }
             backContent={
@@ -118,6 +130,8 @@ const MobInfoDialog = ({
   );
 };
 
+const size = 30;
+
 interface RankSymbolsProps {
   type: string;
   rank: string;
@@ -129,37 +143,21 @@ const RankSymbols = ({ type, rank }: RankSymbolsProps) => {
   }
 
   return (
-    <div className="flex items-center justify-center">
-      <Image
-        src={SYMBOL_IMAGE_SOURCE_BY_TYPE[type]}
-        width={100}
-        height={100}
-        alt=""
-      />
-      <Image
-        src={SYMBOL_IMAGE_SOURCE_BY_TYPE[type]}
-        width={100}
-        height={100}
-        alt=""
-      />
-      <Image
-        src={SYMBOL_IMAGE_SOURCE_BY_TYPE[type]}
-        width={100}
-        height={100}
-        alt=""
-      />
-      <Image
-        src={SYMBOL_IMAGE_SOURCE_BY_TYPE[type]}
-        width={100}
-        height={100}
-        alt=""
-      />
-      <Image
-        src={SYMBOL_IMAGE_SOURCE_BY_TYPE[type]}
-        width={100}
-        height={100}
-        alt=""
-      />
+    <div className="flex items-center justify-center space-x-2">
+      {Array.from({ length: SYMBOL_COUNT_BY_RANK[rank] }).map((_, i) => (
+        <div
+          key={i}
+          className="aspect-square rounded-full shadow-[0_0_20px_5px_#1EFFE7]"
+        >
+          <Image
+            src={SYMBOL_IMAGE_SOURCE_BY_TYPE[type]}
+            width={size}
+            height={size}
+            placeholder="blur"
+            alt=""
+          />
+        </div>
+      ))}
     </div>
   );
 };
