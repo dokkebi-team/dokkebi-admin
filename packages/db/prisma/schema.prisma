@@ -27,9 +27,11 @@ model Mob {
   optimizedIllustrationUrl String   @map("optimized_illustration_url") @db.VarChar(300)
   notes                    String?  @db.Text
   type                     String   @db.VarChar(300) // 종족
+  subType                  String?   @map("sub_type") @db.VarChar(300) // 세부 종종
   size                     String   @db.VarChar(300) // 크기
   rank                     String   @db.VarChar(300) // Rank
   order                    Int      @default(autoincrement())
+  discordChannelUrl        String?  @map("discord_channel_url") @db.Text
 
   @@map("mobs")
 }

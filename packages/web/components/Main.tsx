@@ -11,7 +11,6 @@ import { useAtom, useAtomValue } from "jotai";
 import dynamic from "next/dynamic";
 import { Suspense, useRef, useState } from "react";
 import { AppRef } from "./App";
-import Title3D from "./Title3D";
 import VideoFrame from "./VideoFrame";
 import WebUI from "./WebUI";
 
@@ -47,9 +46,6 @@ const Main = ({}: MainProps) => {
         onMoveArchivePage={async () => {}}
       >
         <Suspense fallback={<div>Loading...</div>}>
-          <div className="pointer-events-none fixed left-0 top-0 opacity-0">
-            <Title3D>Dokkebi World</Title3D>
-          </div>
           <App
             isPlaying={isPlaying}
             playSound={playSound}

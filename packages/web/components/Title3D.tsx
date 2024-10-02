@@ -3,7 +3,7 @@
 import { cn } from "@/utils/ui";
 import { Text3D } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useRef } from "react";
+import { Suspense, useRef } from "react";
 import { Mesh } from "three";
 
 export interface Title3DProps {
@@ -17,7 +17,9 @@ const Title3D = ({ children, className }: Title3DProps) => {
       <Canvas camera={{ position: [0, 0, 8] }}>
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
-        <RotatingText text={children} />
+        <Suspense fallback={null}>
+          <RotatingText text={children} />
+        </Suspense>
       </Canvas>
     </div>
   );
