@@ -67,7 +67,8 @@
 
 body {
   background-color: black;
-  color: white;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 @layer utilities {

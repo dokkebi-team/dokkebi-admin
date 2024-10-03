@@ -38,7 +38,7 @@ const ResourceLoader = ({
   if (!isClicked) {
     return (
       <div
-        style={{ cursor: "pointer" }}
+        className="cursor-pointer text-white"
         onClick={() => {
           setIsClicked(true);
           setIsAppStarted(true);

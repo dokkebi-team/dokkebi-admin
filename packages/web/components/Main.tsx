@@ -45,7 +45,7 @@ const Main = ({}: MainProps) => {
         showHeader={false}
         onMoveArchivePage={async () => {}}
       >
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div className="text-white">Loading...</div>}>
           <App
             isPlaying={isPlaying}
             playSound={playSound}

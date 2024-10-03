@@ -91,7 +91,10 @@ const App = ({ isPlaying, playSound, onSelectMob, forwardedRef }: AppProps) => {
   return (
     <MapConfigsProvider value={mapConfigsData}>
       <StageSizeProvider>
-        <ResourceLoader resources={resources} fallback={<div>Loading...</div>}>
+        <ResourceLoader
+          resources={resources}
+          fallback={<div className="text-white">Loading...</div>}
+        >
           <StateContainer>
             <Camera>
               <Park

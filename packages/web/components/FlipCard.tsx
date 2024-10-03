@@ -2,7 +2,7 @@
 
 import { cn } from "@/utils/ui";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 interface FlipCardProps {
   className?: string;
@@ -22,17 +22,30 @@ export default function FlipCard(
     setIsFlipped(!isFlipped);
   };
 
+  const [isSelecting, setIsSelecting] = useState(false);
+
+  const handleMouseDown = useCallback(() => {
+    setIsSelecting(false);
+  }, []);
+
+  const handleMouseMove = useCallback(() => {
+    if (window.getSelection()?.toString()) {
+      setIsSelecting(true);
+    }
+  }, []);
+
   return (
     <div
-      className={cn("perspective-1000 cursor-pointer outline-none", className)}
-      onMouseDown={() => {
-        console.log("???");
-        handleFlip();
-      }}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          handleFlip();
+      className={cn("cursor-pointer outline-none", className)}
+      onClick={(e) => {
+        if (isSelecting) {
+          e.preventDefault();
+          e.stopPropagation();
+          setIsSelecting(false);
+          return;
         }
+
+        handleFlip();
       }}
       tabIndex={0}
       role="button"
@@ -47,7 +60,11 @@ export default function FlipCard(
         <div className="absolute z-[2] flex h-full w-full items-center justify-center overflow-hidden [-webkit-backface-visibility:hidden] [backface-visibility:hidden]">
           {frontContent}
         </div>
-        <div className="absolute flex h-full w-full justify-center overflow-hidden bg-white [-webkit-backface-visibility:hidden] [backface-visibility:hidden] [transform:rotateY(180deg)]">
+        <div
+          className="absolute z-[2] flex h-full w-full justify-center overflow-hidden bg-white [-webkit-backface-visibility:hidden] [backface-visibility:hidden] [transform:rotateY(180deg)]"
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+        >
           {backContent}
         </div>
       </motion.div>
