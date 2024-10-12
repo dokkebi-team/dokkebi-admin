@@ -1,3 +1,4 @@
+import AppProvider from "@/components/AppProvider";
 import { cn } from "@/utils/ui";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
@@ -10,6 +11,38 @@ const hailFont = localFont({
   variable: "--font-hail",
 });
 
+const pretendardFont = localFont({
+  src: [
+    {
+      path: "../public/fonts/Pretendard-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Pretendard-Bold.woff2",
+      weight: "700",
+      style: "bold",
+    },
+  ],
+  fallback: [
+    "-apple-system",
+    "BlinkMacSystemFont",
+    "system-ui",
+    "Roboto",
+    "Helvetica Neue",
+    "Segoe UI",
+    "Apple SD Gothic Neo",
+    "Noto Sans KR",
+    "Malgun Gothic",
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol",
+    "sans-serif",
+  ],
+  adjustFontFallback: false,
+  display: "optional",
+});
+
 export const metadata: Metadata = {
   title: "Dokkebi World",
 };
@@ -20,8 +53,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={cn(hailFont.variable)}>
-      <body>{children}</body>
+    <html lang="en" className={cn(pretendardFont.className, hailFont.variable)}>
+      <body>
+        <AppProvider>{children}</AppProvider>
+      </body>
     </html>
   );
 }

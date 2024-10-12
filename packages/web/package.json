@@ -17,6 +17,7 @@
     "@pixi/react": "^7.1.2",
     "@pixi/sound": "^5.2.3",
     "@radix-ui/react-dialog": "^1.1.1",
+    "@radix-ui/react-progress": "^1.1.0",
     "@radix-ui/react-scroll-area": "^1.1.0",
     "@radix-ui/react-slot": "^1.0.2",
     "@react-three/drei": "^9.112.0",
@@ -48,6 +49,7 @@
   },
   "devDependencies": {
     "@prisma/nextjs-monorepo-workaround-plugin": "^5.9.0",
+    "@rvxlab/tailwind-plugin-ios-full-height": "^1.1.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

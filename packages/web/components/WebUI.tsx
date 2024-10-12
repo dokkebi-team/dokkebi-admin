@@ -35,11 +35,10 @@ const WebUI = ({
 
   return (
     <div>
-      <main className="relative flex h-[36rem] items-center justify-center">
-        <div className="fixed bottom-0 left-0 right-0 top-0 flex items-center justify-center">
-          {children}
-          {isAppStarted && <MobileController />}
-          {/* {isAppStarted && (
+      <main className="relative flex items-center justify-center">
+        {children}
+        {isAppStarted && <MobileController />}
+        {/* {isAppStarted && (
             <>
               <motion.button
                 className="absolute bottom-6 left-6 h-[9.375rem] w-[9.375rem] bg-[url('/club.png')] bg-cover bg-center transition-transform hover:scale-110"
@@ -64,7 +63,6 @@ const WebUI = ({
               </motion.button>
             </>
           )} */}
-        </div>
         {/* <NavPage show={router.query.pageName === 'about'}>
           <About />
         </NavPage> */}

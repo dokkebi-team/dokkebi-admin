@@ -6,20 +6,17 @@ import {
   playerAnimationStatusAtom,
   selectedVideoIndexAtom,
 } from "@/stores";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useAtom, useAtomValue } from "jotai";
 import dynamic from "next/dynamic";
 import { Suspense, useRef, useState } from "react";
 import { AppRef } from "./App";
 import VideoFrame from "./VideoFrame";
-import WebUI from "./WebUI";
 
 const App = dynamic(() => import("./App"), { ssr: false });
 
 export interface MainProps {}
 
 const Main = ({}: MainProps) => {
-  const [queryClient] = useState(() => new QueryClient());
   const appRef = useRef<AppRef>(null);
   const playerAnimationStatus = useAtomValue(playerAnimationStatusAtom);
   const isAppStarted = useAtomValue(isAppStartedAtom);
@@ -35,25 +32,13 @@ const Main = ({}: MainProps) => {
   const showHeader = isAppStarted && !isPlaying;
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <WebUI
-        isAppStarted={isAppStarted}
-        isPageOpened={false}
-        // showMenu={showMenu}
-        // showHeader={showHeader}
-        showMenu={false}
-        showHeader={false}
-        onMoveArchivePage={async () => {}}
-      >
-        <Suspense fallback={<div className="text-white">Loading...</div>}>
-          <App
-            isPlaying={isPlaying}
-            playSound={playSound}
-            onSelectMob={setSelectedMobId}
-            forwardedRef={appRef}
-          />
-        </Suspense>
-      </WebUI>
+    <Suspense fallback={null}>
+      <App
+        isPlaying={isPlaying}
+        playSound={playSound}
+        onSelectMob={setSelectedMobId}
+        forwardedRef={appRef}
+      />
       {selectedVideoIndex !== undefined && (
         <VideoFrame
           url={VIDEOS[selectedVideoIndex]}
@@ -62,7 +47,7 @@ const Main = ({}: MainProps) => {
           }}
         />
       )}
-    </QueryClientProvider>
+    </Suspense>
   );
 };
 

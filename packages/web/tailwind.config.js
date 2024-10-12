@@ -88,5 +88,9 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("tailwindcss-safe-area")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("tailwindcss-safe-area"),
+    require("@rvxlab/tailwind-plugin-ios-full-height"),
+  ],
 };
