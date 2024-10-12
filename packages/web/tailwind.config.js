@@ -9,6 +9,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        hail: ["var(--font-hail)"],
+      },
       colors: {
         "archive-bg-0": "#7cb2ff",
         "archive-bg-1": "#4dffff",

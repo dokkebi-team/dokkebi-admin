@@ -1,9 +1,9 @@
-import Main from '@/components/Main'
+import Main from "@/components/Main";
 
 export interface IndexPageProps {}
 
 const IndexPage = ({}: IndexPageProps) => {
-  return <Main />
-}
+  return <Main />;
+};
 
-export default IndexPage
+export default IndexPage;
