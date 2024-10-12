@@ -2,12 +2,14 @@
 
 import { groups, items } from "@/generated/data";
 import { createContext } from "@/modules/create-context";
+import { archiveItemsAtom } from "@/store/archive";
 import { ArchiveItem } from "@/types";
 import { cn } from "@/utils/ui";
-import { Html, OrbitControls } from "@react-three/drei";
+import { Html } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
+import { motion } from "framer-motion";
 import { produce } from "immer";
-import Image from "next/image";
+import { useAtomValue } from "jotai";
 import { ReactNode, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 
@@ -16,6 +18,37 @@ const SPAWN_RANGE = 50;
 const BLACKHOLE_PULL = 0.002;
 const ORBIT_SPEED = 0.005;
 const RESET_DURATION = 100;
+
+export interface BlackholeObjectsProps {
+  onSelectArchiveItem: (id: string) => void;
+}
+
+const BlackholeObjects = ({ onSelectArchiveItem }: BlackholeObjectsProps) => {
+  return (
+    <motion.div
+      className="h-full"
+      initial={{
+        opacity: 0,
+      }}
+      animate={{
+        opacity: 1,
+      }}
+      exit={{
+        opacity: 0,
+      }}
+      transition={{
+        delay: 1,
+        duration: 1,
+      }}
+    >
+      <Canvas camera={{ position: [0, 0, 40], fov: 60 }}>
+        <ArchiveItemsProvider>
+          <FloatingObjectsContainer onSelectArchiveItem={onSelectArchiveItem} />
+        </ArchiveItemsProvider>
+      </Canvas>
+    </motion.div>
+  );
+};
 
 const [ArchiveItemContextProvider, useArchiveItemContext] = createContext<{
   archiveItems: ArchiveItem[];
@@ -37,29 +70,7 @@ const ArchiveItemsProvider = ({ children }: { children: ReactNode }) => {
       return randomIds;
     },
   );
-  const archiveItems: ArchiveItem[] = useMemo(() => {
-    return [
-      ...groups.map((group) => ({
-        type: "group" as const,
-        id: group.id,
-        data: group,
-      })),
-      ...items.map((item) => ({
-        type: "item" as const,
-        id: item.id,
-        data: item,
-      })),
-    ];
-  }, []);
-  const archiveItemById = useMemo(() => {
-    return archiveItems.reduce(
-      (acc, archiveItem) => {
-        acc[archiveItem.id] = archiveItem;
-        return acc;
-      },
-      {} as Record<string, ArchiveItem>,
-    );
-  }, [archiveItems]);
+  const { archiveItemById, archiveItems } = useAtomValue(archiveItemsAtom);
 
   const value = useMemo(() => {
     return {
@@ -79,9 +90,13 @@ const ArchiveItemsProvider = ({ children }: { children: ReactNode }) => {
 
 interface FloatingObjectProps {
   index: number;
+  onSelectArchiveItem: (id: string) => void;
 }
 
-const FloatingObject = ({ index }: FloatingObjectProps) => {
+const FloatingObject = ({
+  index,
+  onSelectArchiveItem,
+}: FloatingObjectProps) => {
   const {
     archiveItems,
     archiveItemById,
@@ -180,42 +195,38 @@ const FloatingObject = ({ index }: FloatingObjectProps) => {
 
         const randomIndex = Math.floor(Math.random() * candidateIds.length);
 
-        console.log(candidateIds[randomIndex]);
-
         draft[index] = candidateIds[randomIndex];
       }),
     );
     resetProgressRef.current = 0;
   };
 
-  console.log(archiveItem);
-
   return (
     <mesh ref={meshRef} position={position} scale={scale}>
       <Html transform scale={0.5}>
         {archiveItem.type === "group" ? (
-          <div className="flex aspect-square h-40 items-center justify-center rounded-full bg-[#D1FF4E]">
-            <div className="text-center text-[2.5rem] leading-none">
+          <div
+            className="flex aspect-square h-[12.5rem] items-center justify-center rounded-full bg-[#D1FF4E] transition-transform hover:scale-110"
+            role="button"
+          >
+            <div className="text-center text-[2.5rem] font-bold leading-none">
               #{archiveItem.data.name}
             </div>
           </div>
-        ) : archiveItem.data.imageUrl ? (
+        ) : archiveItem.data.resizedImageUrl ? (
           <div
             className={cn(
-              "flex aspect-square h-60 items-center justify-center overflow-hidden",
+              "flex aspect-square h-60 items-center justify-center overflow-hidden bg-cover bg-center bg-no-repeat transition-transform hover:scale-110",
               archiveItem.id.startsWith("original") && "rounded-2xl",
             )}
-          >
-            <Image
-              className="h-full w-full"
-              src={archiveItem.data.imageUrl}
-              alt=""
-              height={160}
-              width={160}
-            />
-          </div>
+            style={{
+              backgroundImage: `url(${archiveItem.data.resizedImageUrl})`,
+            }}
+            role="button"
+            onClick={() => onSelectArchiveItem(archiveItem.id)}
+          />
         ) : (
-          <div className="flex aspect-square h-40 items-center justify-center rounded-full bg-[#00FF66]">
+          <div className="h-50 flex aspect-square items-center justify-center rounded-full bg-[#00FF66]">
             <div className="text-center text-[2.5rem] leading-none">
               #{archiveItem.data.name}
             </div>
@@ -226,28 +237,23 @@ const FloatingObject = ({ index }: FloatingObjectProps) => {
   );
 };
 
-interface FloatingObjectsContainerProps {}
+interface FloatingObjectsContainerProps {
+  onSelectArchiveItem: (id: string) => void;
+}
 
-const FloatingObjectsContainer = ({}: FloatingObjectsContainerProps) => {
+const FloatingObjectsContainer = ({
+  onSelectArchiveItem,
+}: FloatingObjectsContainerProps) => {
   const { currentArchiveItemIds, archiveItemById } = useArchiveItemContext();
   return currentArchiveItemIds.map((id, index) => {
-    return <FloatingObject key={`${id}-${index}`} index={index} />;
+    return (
+      <FloatingObject
+        key={`${id}-${index}`}
+        index={index}
+        onSelectArchiveItem={onSelectArchiveItem}
+      />
+    );
   });
 };
 
-export default function Test() {
-  return (
-    <div className="h-screen w-full bg-white">
-      <Canvas camera={{ position: [0, 0, 40], fov: 60 }}>
-        <ArchiveItemsProvider>
-          <FloatingObjectsContainer />
-        </ArchiveItemsProvider>
-        <OrbitControls
-          enableZoom={false}
-          enablePan={false}
-          enableRotate={false}
-        />
-      </Canvas>
-    </div>
-  );
-}
+export default BlackholeObjects;

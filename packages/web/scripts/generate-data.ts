@@ -44,8 +44,9 @@ async function main() {
     items.push({
       id: `illustration-${record.inventoryNo}`,
       name: record.name,
+      inventoryNo: record.inventoryNo,
       imageUrl: `https://ifzehytogmlbmhdixlmc.supabase.co/storage/v1/object/public/assets/optimized_illustrations/${record.illustrationFileName}.webp`,
-      resizedImageUrl: `https://ifzehytogmlbmhdixlmc.supabase.co/storage/v1/object/public/assets/optimized_illustrations/resized/${record.illustrationFileName}.webp`,
+      resizedImageUrl: `https://ifzehytogmlbmhdixlmc.supabase.co/storage/v1/object/public/assets/optimized_illustrations/${record.illustrationFileName}.webp`,
       tags: sanitizeTags([
         "도깨비",
         "일러스트",
@@ -61,8 +62,14 @@ async function main() {
 
   for await (const record of c1s2Parser) {
     console.log(`processing C1S2 ${record.inventoryNo} ${record.name}`);
+
+    if (!record.fileName) {
+      continue;
+    }
+
     items.push({
       id: `original-${record.inventoryNo}`,
+      inventoryNo: record.inventoryNo,
       name: record.name,
       imageUrl: `https://ifzehytogmlbmhdixlmc.supabase.co/storage/v1/object/public/assets/originals/${record.fileName}.jpg`,
       resizedImageUrl: `https://ifzehytogmlbmhdixlmc.supabase.co/storage/v1/object/public/assets/originals/resized/${record.fileName}.jpg`,

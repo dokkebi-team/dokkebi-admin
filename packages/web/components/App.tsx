@@ -2,7 +2,7 @@
 
 import { MapConfigsContext, MapConfigsProvider } from "@/contexts/map-configs";
 import { useContextBridge } from "@/hooks/useContextBridge";
-import { useMapConfigsQuery } from "@/queries/map-configs";
+import { useMapConfigsSuspenseQuery } from "@/queries/map-configs";
 import { Container, Sprite, Stage } from "@pixi/react";
 import * as PIXI from "pixi.js";
 import React, {
@@ -63,7 +63,7 @@ export interface AppProps {
 }
 
 const App = ({ isPlaying, playSound, onSelectMob, forwardedRef }: AppProps) => {
-  const { data: mapConfigsData } = useMapConfigsQuery();
+  const { data: mapConfigsData } = useMapConfigsSuspenseQuery();
   const bangRef = useRef<BangRef>(null);
   const resources = useMemo(() => {
     return [

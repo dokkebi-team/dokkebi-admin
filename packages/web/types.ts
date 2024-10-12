@@ -28,6 +28,7 @@ export interface Group {
 export interface Item {
   id: string;
   name: string;
+  inventoryNo: string;
   imageUrl: string;
   resizedImageUrl: string;
   tags: string[];
