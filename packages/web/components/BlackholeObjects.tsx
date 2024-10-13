@@ -15,7 +15,7 @@ import * as THREE from "three";
 
 const OBJECT_COUNT = 20;
 const SPAWN_RANGE = 50;
-const BLACKHOLE_PULL = 0.0015;
+const BLACKHOLE_PULL = 0.0018;
 const ORBIT_SPEED = 0.005;
 const RESET_DURATION = 100;
 
@@ -60,7 +60,7 @@ const BlackholeObjects = ({
             <mesh>
               <Html center zIndexRange={[100, 100]}>
                 <div
-                  className="flex aspect-square h-[12.5rem] items-center justify-center rounded-full bg-[#D1FF4E]"
+                  className="flex aspect-square h-[9.5rem] items-center justify-center rounded-full bg-[#D1FF4E] md:h-[12.5rem]"
                   role="button"
                 >
                   <div className="absolute inset-x-0 bottom-0 pb-4 text-center">
@@ -68,7 +68,7 @@ const BlackholeObjects = ({
                       <XIcon />
                     </button>
                   </div>
-                  <div className="text-center text-[2.5rem] font-bold leading-none">
+                  <div className="text-center text-[1.75rem] font-bold leading-none md:text-[2.5rem]">
                     #{selectedTag}
                   </div>
                 </div>

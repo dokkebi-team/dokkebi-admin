@@ -1,22 +1,22 @@
 "use client";
 
+import { VIDEOS } from "@/constants";
 import { MapConfigsContext, MapConfigsProvider } from "@/contexts/map-configs";
 import { useContextBridge } from "@/hooks/useContextBridge";
 import { useMapConfigsSuspenseQuery } from "@/queries/map-configs";
+import { isAppStartedAtom, selectedVideoIndexAtom } from "@/stores/map";
 import { Container, Sprite, Stage } from "@pixi/react";
+import { Portal } from "@radix-ui/react-portal";
+import { useAtom, useAtomValue } from "jotai";
 import * as PIXI from "pixi.js";
-import React, {
-  useEffect,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import BackgroundSoundProvider, {
   useBackgroundSound,
 } from "./BackgroundSoundProvider";
-import Bang, { BangRef } from "./Bang";
+import { BangRef } from "./Bang";
 import Camera from "./Camera";
+import HatDialog from "./HatDialog";
+import MobileController from "./MobileController";
 import MobInfoDialog from "./MobInfoDialog";
 import Mobs from "./Mobs";
 import Player from "./Player";
@@ -26,6 +26,7 @@ import {
   StageSizeProvider,
   useStageSize,
 } from "./StageSizeProvider";
+import VideoFrame from "./VideoFrame";
 
 export interface AppRef {
   playBang: () => void;
@@ -55,14 +56,13 @@ const RESOURCES = [
   "/bang14.png",
 ];
 
-export interface AppProps {
-  isPlaying: boolean;
-  forwardedRef: React.Ref<AppRef>;
-  playSound: boolean;
-  onSelectMob: (mobId: string) => void;
-}
+export interface AppProps {}
 
-const App = ({ isPlaying, playSound, onSelectMob, forwardedRef }: AppProps) => {
+const App = ({}: AppProps) => {
+  const isAppStarted = useAtomValue(isAppStartedAtom);
+  const [selectedVideoIndex, setSelectedVideoIndex] = useAtom(
+    selectedVideoIndexAtom,
+  );
   const { data: mapConfigsData } = useMapConfigsSuspenseQuery();
   const bangRef = useRef<BangRef>(null);
   const resources = useMemo(() => {
@@ -72,38 +72,26 @@ const App = ({ isPlaying, playSound, onSelectMob, forwardedRef }: AppProps) => {
       //   .map((mob) => mob.optimizedIllustrationUrl)
       //   .filter(Boolean),
     ];
-  }, [mapConfigsData.mobList]);
+  }, []);
   const [selectedMobInventoryNo, setSelectedMobInventoryNo] =
     useState<string>();
-
-  useImperativeHandle(
-    forwardedRef,
-    () => {
-      return {
-        playBang: async () => {
-          return bangRef.current?.play();
-        },
-      };
-    },
-    [],
-  );
+  const [showHatDialog, setShowHatDialog] = useState(false);
 
   return (
     <MapConfigsProvider value={mapConfigsData}>
       <StageSizeProvider>
-        <ResourceLoader
-          resources={resources}
-          fallback={<div className="text-white">Loading...</div>}
-        >
+        <ResourceLoader resources={resources}>
           <StateContainer>
             <Camera>
               <Park
-                isPlaying={isPlaying}
-                playSound={playSound}
+                isPlaying={
+                  isAppStarted && !selectedMobInventoryNo && !showHatDialog
+                }
+                playSound={isAppStarted}
                 onSelectMob={setSelectedMobInventoryNo}
               />
             </Camera>
-            <Bang zIndex={10} ref={bangRef} />
+            {/* <Bang zIndex={10} ref={bangRef} /> */}
           </StateContainer>
         </ResourceLoader>
       </StageSizeProvider>
@@ -114,6 +102,29 @@ const App = ({ isPlaying, playSound, onSelectMob, forwardedRef }: AppProps) => {
           setSelectedMobInventoryNo(undefined);
         }}
       />
+      <HatDialog open={showHatDialog} onClose={() => {}} />
+      {isAppStarted && !selectedMobInventoryNo && (
+        <>
+          <MobileController />
+          <Portal container={document.documentElement}>
+            <button
+              className="scale-1 canhover:hover:scale-90 fixed right-10 z-[100] aspect-square h-[6.25rem] rounded-full bg-yellow-200 transition-transform bottom-safe-offset-10 active:scale-90"
+              type="button"
+              onClick={() => {
+                setShowHatDialog((prev) => !prev);
+              }}
+            ></button>
+          </Portal>
+        </>
+      )}
+      {selectedVideoIndex !== undefined && (
+        <VideoFrame
+          url={VIDEOS[selectedVideoIndex]}
+          onEnded={() => {
+            setSelectedVideoIndex(undefined);
+          }}
+        />
+      )}
     </MapConfigsProvider>
   );
 };

@@ -126,7 +126,7 @@ const Mobs = ({ onSelectMob }: MobsProps) => {
               y={mobConfig.y}
               zIndex={zIndex}
               interactive
-              pointerdown={(e) => {
+              pointerup={(e) => {
                 e.preventDefault();
                 handleSelectMob(mobIndex);
               }}
