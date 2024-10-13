@@ -4,7 +4,7 @@ import { useAtomValue } from "jotai";
 import React, { useRef, useState } from "react";
 import { useKey } from "react-use";
 import { useBreath } from "../hooks/useBreath";
-import { playerAtom } from "../stores";
+import { playerAtom } from "../stores/map";
 import { getDistance } from "../utils/common";
 import Cursor from "./Cursor";
 import { useStageSize } from "./StageSizeProvider";

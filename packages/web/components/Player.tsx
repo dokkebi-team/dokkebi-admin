@@ -6,7 +6,7 @@ import {
   mobileKeyControlsAtom,
   playerAtom,
   selectedVideoIndexAtom,
-} from "@/stores";
+} from "@/stores/map";
 import { BoundaryItem } from "@/types";
 import { rectangularCollision } from "@/utils/common";
 import { Sprite, useTick } from "@pixi/react";

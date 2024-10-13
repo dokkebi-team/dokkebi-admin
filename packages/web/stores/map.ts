@@ -1,7 +1,7 @@
 import { atom } from "jotai";
 import { selectAtom } from "jotai/utils";
-import { PlayerState } from "./components/Player";
-import { INITIAL_POSITION } from "./constants";
+import { PlayerState } from "../components/Player";
+import { INITIAL_POSITION } from "../constants";
 
 export const isAppStartedAtom = atom(false);
 

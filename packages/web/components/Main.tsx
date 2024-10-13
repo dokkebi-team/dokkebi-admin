@@ -5,7 +5,7 @@ import {
   isAppStartedAtom,
   playerAnimationStatusAtom,
   selectedVideoIndexAtom,
-} from "@/stores";
+} from "@/stores/map";
 import { useAtom, useAtomValue } from "jotai";
 import dynamic from "next/dynamic";
 import { Suspense, useRef, useState } from "react";

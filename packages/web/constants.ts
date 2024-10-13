@@ -1,3 +1,6 @@
+import { groups, items } from "./generated/data";
+import { dedupe } from "./utils/common";
+
 export const WORLD_WIDTH = 2048;
 export const WORLD_HEIGHT = 5614;
 
@@ -28,4 +31,11 @@ export const VIDEOS = [
   "https://youtu.be/Ny-csc3tGwY",
   "https://youtu.be/P17_urwCukQ",
   "https://youtu.be/vqiENXphx1I",
+];
+
+export const ARCHIVE_SEARCH_DATA = [
+  ...dedupe([
+    ...groups.map((group) => group.tags).flat(),
+    ...items.map((item) => item.tags).flat(),
+  ]),
 ];

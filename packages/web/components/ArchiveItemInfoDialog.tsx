@@ -4,16 +4,20 @@ import { motion, useAnimation } from "framer-motion";
 import Image from "next/image";
 import * as React from "react";
 import { useEffect, useState } from "react";
+import Chip from "./Chip";
 import { Drawer, DrawerContent } from "./ui/drawer";
+import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 
 export type ArchiveItemInfoDialogProps = React.ComponentPropsWithoutRef<
   typeof Drawer
 > & {
   data?: { archiveItem: Item; mobInfo: PrismaDBMainTypes.Mob };
+  onSelectTag: (tag: string) => void;
 };
 
 const ArchiveItemInfoDialog = ({
   data,
+  onSelectTag,
   ...rest
 }: ArchiveItemInfoDialogProps) => {
   if (!data) {
@@ -27,12 +31,12 @@ const ArchiveItemInfoDialog = ({
         alt={data.archiveItem.name}
       />
       <Drawer {...rest}>
-        <DrawerContent>
-          <div className="flex h-[50vh] flex-col py-[3rem]">
-            <h2 className="px-12 text-[24px] font-bold">
+        <DrawerContent className="outline-none">
+          <div className="flex h-[50vh] flex-col pb-[2rem] pt-[3rem] md:pb-[3rem]">
+            <h2 className="px-5 text-[24px] font-bold md:px-12">
               {data.mobInfo.name || "???"}
             </h2>
-            <dl className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 px-12">
+            <dl className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 px-5 md:px-12">
               <div className="flex items-center text-sm font-semibold">
                 <dt className="text-[#005212]">종족</dt>
                 <div className="mx-2 h-5 w-[2px] bg-[#12F085]" />
@@ -54,9 +58,19 @@ const ArchiveItemInfoDialog = ({
                 <dd>{data.mobInfo.inventoryNo}</dd>
               </div>
             </dl>
-            <p className="mt-8 flex-1 overflow-auto px-12">
+            <p className="mt-8 flex-1 overflow-auto px-5 md:px-12">
               {data.mobInfo.notes}
             </p>
+            <ScrollArea className="mt-8 w-full">
+              <div className="flex w-max select-none flex-nowrap gap-x-2 px-5 pb-2 md:px-12">
+                {data.archiveItem.tags.map((tag) => (
+                  <Chip key={tag} onClick={() => onSelectTag(tag)}>
+                    #{tag}
+                  </Chip>
+                ))}
+              </div>
+              <ScrollBar className="px-5 md:px-12" orientation="horizontal" />
+            </ScrollArea>
           </div>
         </DrawerContent>
       </Drawer>
@@ -92,7 +106,7 @@ const ImageWithTransition = ({ src, alt }: ImageWithTransitionProps) => {
       transition={{ ease: "easeOut" }}
     >
       <Image
-        className="pointer-events-auto h-full w-auto flex-1"
+        className="pointer-events-auto h-full w-auto flex-1 rounded-lg"
         src={src}
         alt={alt}
         width={200}
@@ -100,6 +114,7 @@ const ImageWithTransition = ({ src, alt }: ImageWithTransitionProps) => {
         onLoadingComplete={() => {
           setLoaded(true);
         }}
+        unoptimized
       />
     </motion.div>
   );

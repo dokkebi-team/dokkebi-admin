@@ -2,7 +2,7 @@ import { groups, items } from "@/generated/data";
 import { ArchiveItem } from "@/types";
 import { atom } from "jotai";
 
-const archiveItems = [
+export const ARCHIVE_ITEMS = [
   ...groups.map((group) => ({
     type: "group" as const,
     id: group.id,
@@ -15,7 +15,7 @@ const archiveItems = [
   })),
 ];
 
-const archiveItemById = archiveItems.reduce(
+const archiveItemById = ARCHIVE_ITEMS.reduce(
   (acc, archiveItem) => {
     acc[archiveItem.id] = archiveItem;
     return acc;
@@ -27,8 +27,10 @@ export const archiveItemsAtom = atom<{
   archiveItems: ArchiveItem[];
   archiveItemById: Record<string, ArchiveItem>;
 }>({
-  archiveItems,
+  archiveItems: ARCHIVE_ITEMS,
   archiveItemById,
 });
 
-export const selectedArchiveItemAtomId = atom<string | undefined>(undefined);
+export const selectedArchiveItemIdAtom = atom<string | undefined>(undefined);
+
+export const selectedTagAtom = atom<string | undefined>(undefined);

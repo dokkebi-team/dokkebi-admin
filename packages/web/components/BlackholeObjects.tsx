@@ -1,8 +1,7 @@
 "use client";
 
-import { groups, items } from "@/generated/data";
 import { createContext } from "@/modules/create-context";
-import { archiveItemsAtom } from "@/store/archive";
+import { archiveItemsAtom } from "@/stores/archive";
 import { ArchiveItem } from "@/types";
 import { cn } from "@/utils/ui";
 import { Html } from "@react-three/drei";
@@ -10,23 +9,32 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { motion } from "framer-motion";
 import { produce } from "immer";
 import { useAtomValue } from "jotai";
+import { XIcon } from "lucide-react";
 import { ReactNode, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 
 const OBJECT_COUNT = 20;
 const SPAWN_RANGE = 50;
-const BLACKHOLE_PULL = 0.002;
+const BLACKHOLE_PULL = 0.0015;
 const ORBIT_SPEED = 0.005;
 const RESET_DURATION = 100;
 
 export interface BlackholeObjectsProps {
+  selectedTag?: string;
+  archiveItems: ArchiveItem[];
   onSelectArchiveItem: (id: string) => void;
+  onBack?: () => void;
 }
 
-const BlackholeObjects = ({ onSelectArchiveItem }: BlackholeObjectsProps) => {
+const BlackholeObjects = ({
+  selectedTag,
+  archiveItems,
+  onSelectArchiveItem,
+  onBack,
+}: BlackholeObjectsProps) => {
   return (
     <motion.div
-      className="h-full"
+      className="fixed inset-x-0 inset-y-0"
       initial={{
         opacity: 0,
       }}
@@ -37,12 +45,36 @@ const BlackholeObjects = ({ onSelectArchiveItem }: BlackholeObjectsProps) => {
         opacity: 0,
       }}
       transition={{
-        delay: 1,
+        // delay: 1,
         duration: 1,
       }}
     >
-      <Canvas camera={{ position: [0, 0, 40], fov: 60 }}>
-        <ArchiveItemsProvider>
+      <Canvas
+        camera={{ position: [0, 0, 40], fov: 60 }}
+        style={{
+          flex: 1,
+        }}
+      >
+        <ArchiveItemsProvider archiveItems={archiveItems}>
+          {selectedTag && (
+            <mesh>
+              <Html center zIndexRange={[100, 100]}>
+                <div
+                  className="flex aspect-square h-[12.5rem] items-center justify-center rounded-full bg-[#D1FF4E]"
+                  role="button"
+                >
+                  <div className="absolute inset-x-0 bottom-0 pb-4 text-center">
+                    <button className="p-2" onClick={onBack} type="button">
+                      <XIcon />
+                    </button>
+                  </div>
+                  <div className="text-center text-[2.5rem] font-bold leading-none">
+                    #{selectedTag}
+                  </div>
+                </div>
+              </Html>
+            </mesh>
+          )}
           <FloatingObjectsContainer onSelectArchiveItem={onSelectArchiveItem} />
         </ArchiveItemsProvider>
       </Canvas>
@@ -57,20 +89,31 @@ const [ArchiveItemContextProvider, useArchiveItemContext] = createContext<{
   setCurrentArchiveItemIds: (ids: string[]) => void;
 }>();
 
-const ArchiveItemsProvider = ({ children }: { children: ReactNode }) => {
+const ArchiveItemsProvider = ({
+  children,
+  archiveItems,
+}: {
+  children: ReactNode;
+  archiveItems: ArchiveItem[];
+}) => {
   const [currentArchiveItemIds, setCurrentArchiveItemIds] = useState<string[]>(
     () => {
-      const itemIds = items.map((item) => item.id);
-      const randomIds: string[] = groups.map((group) => group.id);
-      for (let i = 0; i < OBJECT_COUNT - groups.length; i++) {
+      const itemIds = archiveItems.map((item) => item.id);
+      const randomIds: string[] = archiveItems
+        .filter((item) => item.type === "group")
+        .map((group) => group.id);
+      const additionalObjectCount =
+        Math.min(OBJECT_COUNT, itemIds.length) - randomIds.length;
+      for (let i = 0; i < additionalObjectCount; i++) {
         const randomIndex = Math.floor(Math.random() * itemIds.length);
+
         randomIds.push(itemIds[randomIndex]);
       }
 
       return randomIds;
     },
   );
-  const { archiveItemById, archiveItems } = useAtomValue(archiveItemsAtom);
+  const { archiveItemById } = useAtomValue(archiveItemsAtom);
 
   const value = useMemo(() => {
     return {
@@ -178,7 +221,7 @@ const FloatingObject = ({
 
     setCurrentArchiveItemIds(
       produce(currentArchiveItemIds, (draft) => {
-        const candidateIds =
+        const prePreCandidateIds =
           archiveItem.type === "group"
             ? archiveItems
                 .filter(
@@ -193,6 +236,19 @@ const FloatingObject = ({
                 )
                 .map((item) => item.id);
 
+        const preCandidateIds =
+          archiveItem.type === "item" && prePreCandidateIds.length === 0
+            ? currentArchiveItemIds.filter(
+                (id) =>
+                  id !== archiveItem.id && archiveItemById[id].type === "item",
+              )
+            : prePreCandidateIds;
+
+        const candidateIds =
+          archiveItem.type === "item" && preCandidateIds.length === 0
+            ? currentArchiveItemIds
+            : preCandidateIds;
+
         const randomIndex = Math.floor(Math.random() * candidateIds.length);
 
         draft[index] = candidateIds[randomIndex];
@@ -203,11 +259,12 @@ const FloatingObject = ({
 
   return (
     <mesh ref={meshRef} position={position} scale={scale}>
-      <Html transform scale={0.5}>
+      <Html transform scale={0.5} zIndexRange={[50, 0]}>
         {archiveItem.type === "group" ? (
           <div
             className="flex aspect-square h-[12.5rem] items-center justify-center rounded-full bg-[#D1FF4E] transition-transform hover:scale-110"
             role="button"
+            onClick={() => onSelectArchiveItem(archiveItem.id)}
           >
             <div className="text-center text-[2.5rem] font-bold leading-none">
               #{archiveItem.data.name}

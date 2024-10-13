@@ -85,6 +85,7 @@ module.exports = {
         tallOrWideAndLandscape: {
           raw: `only screen and ((max-height: 960px) and (max-width: 480px) or (max-height: 480px) and (max-width: 960px)) and (orientation: landscape)`,
         },
+        canhover: { raw: "(hover: hover)" },
       },
     },
   },

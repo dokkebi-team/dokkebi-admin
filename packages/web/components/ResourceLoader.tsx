@@ -1,5 +1,5 @@
 import loadingImg from "@/public/loading.png";
-import { isAppStartedAtom } from "@/stores";
+import { isAppStartedAtom } from "@/stores/map";
 import { motion } from "framer-motion";
 import { useAtom } from "jotai";
 import Image from "next/image";
