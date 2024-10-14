@@ -1,4 +1,4 @@
-import { Item } from "@/types";
+import { Item } from "@/types/common";
 import { PrismaDBMainTypes } from "@dokkebi-world/db";
 import { motion, useAnimation } from "framer-motion";
 import Image from "next/image";

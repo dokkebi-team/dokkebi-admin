@@ -1,6 +1,6 @@
 import { WORLD_HEIGHT, WORLD_WIDTH } from "@/constants";
 import { api } from "@/modules/api";
-import { BoundaryItem, MobConfig } from "@/types";
+import { BoundaryItem, MobConfig } from "@/types/common";
 import { PrismaDBMainTypes } from "@dokkebi-world/db";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 

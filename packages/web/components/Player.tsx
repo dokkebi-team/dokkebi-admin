@@ -7,7 +7,7 @@ import {
   playerAtom,
   selectedVideoIndexAtom,
 } from "@/stores/map";
-import { BoundaryItem } from "@/types";
+import { BoundaryItem } from "@/types/common";
 import { rectangularCollision } from "@/utils/common";
 import { Sprite, useTick } from "@pixi/react";
 import { useAtom, useAtomValue } from "jotai";

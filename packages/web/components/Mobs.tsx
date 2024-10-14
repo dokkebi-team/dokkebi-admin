@@ -10,10 +10,11 @@ import Cursor from "./Cursor";
 import { useStageSize } from "./StageSizeProvider";
 
 export interface MobsProps {
+  isPlaying?: boolean;
   onSelectMob: (mobId: string) => void;
 }
 
-const Mobs = ({ onSelectMob }: MobsProps) => {
+const Mobs = ({ isPlaying, onSelectMob }: MobsProps) => {
   const { mobList, mobConfigs } = useMapConfigs();
   const size = useStageSize();
   const { breathScaleFactor } = useBreath();
@@ -21,6 +22,10 @@ const Mobs = ({ onSelectMob }: MobsProps) => {
   const isMouseInteractionProcessing = useRef(false);
   const [focussedMobIndex, setFocussedMobIndex] = useState<number>();
   const handleSelectMob = (mobIndex: number) => {
+    if (!isPlaying) {
+      return;
+    }
+
     onSelectMob(mobList[mobIndex].inventoryNo);
   };
   const handleMouseOver = (mobIndex: number) => {

@@ -380,6 +380,9 @@ importers:
       lucide-react:
         specifier: ^0.441.0
         version: 0.441.0(react@18.3.1)
+      markdown-to-jsx:
+        specifier: ^7.5.0
+        version: 7.5.0(react@18.3.1)
       next:
         specifier: 14.2.11
         version: 14.2.11(react-dom@18.3.1)(react@18.3.1)(sass@1.79.1)
@@ -6114,6 +6117,15 @@ packages:
     dependencies:
       '@types/three': 0.169.0
       three: 0.168.0
+    dev: false
+
+  /markdown-to-jsx@7.5.0(react@18.3.1):
+    resolution: {integrity: sha512-RrBNcMHiFPcz/iqIj0n3wclzHXjwS7mzjBNWecKKVhNTIxQepIix6Il/wZCn2Cg5Y1ow2Qi84+eJrryFRWBEWw==}
+    engines: {node: '>= 10'}
+    peerDependencies:
+      react: '>= 0.14.0'
+    dependencies:
+      react: 18.3.1
     dev: false
 
   /marked@11.2.0:

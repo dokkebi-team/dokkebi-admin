@@ -1,4 +1,4 @@
-import { Group, Item } from "@/types";
+import { Group, Item } from "@/types/common";
 import { parse } from "csv-parse";
 import fs from "node:fs";
 import path from "node:path";

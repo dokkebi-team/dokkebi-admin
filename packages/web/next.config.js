@@ -15,6 +15,11 @@ const nextConfig = {
       config.plugins = [...config.plugins, new PrismaPlugin()];
     }
 
+    config.module.rules.push({
+      test: /\.md$/,
+      type: "asset/source",
+    });
+
     return config;
   },
 };

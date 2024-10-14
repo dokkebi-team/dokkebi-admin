@@ -2,7 +2,7 @@
 
 import { createContext } from "@/modules/create-context";
 import { archiveItemsAtom } from "@/stores/archive";
-import { ArchiveItem } from "@/types";
+import { ArchiveItem } from "@/types/common";
 import { cn } from "@/utils/ui";
 import { Html } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";

@@ -1,4 +1,4 @@
-import { Point } from "../types";
+import { Point } from "../types/common";
 
 export const rectangularCollision = ({ rectangle1, rectangle2 }) => {
   return (

@@ -1,5 +1,5 @@
 import { groups, items } from "@/generated/data";
-import { ArchiveItem } from "@/types";
+import { ArchiveItem } from "@/types/common";
 import { atom } from "jotai";
 
 export const ARCHIVE_ITEMS = [
