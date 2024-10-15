@@ -99,8 +99,11 @@ const Mobs = ({ isPlaying, onSelectMob }: MobsProps) => {
         }
 
         const zIndex =
-          player.position.y < mobConfig.y + 40 * mobConfig.scale ? 3 : 1;
-
+          mob.inventoryNo === "CD67"
+            ? 4
+            : player.position.y < mobConfig.y + 40 * mobConfig.scale
+              ? 3
+              : 1;
         if (!mob.optimizedIllustrationUrl) {
           return null;
         }

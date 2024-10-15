@@ -1,14 +1,18 @@
 "use client";
 
+import { groups } from "@/generated/data";
 import { useMapConfigsQuery } from "@/queries/map-configs";
 import {
   archiveItemsAtom,
   selectedArchiveItemIdAtom,
   selectedTagAtom,
 } from "@/stores/archive";
-import { AnimatePresence } from "framer-motion";
+import { GroupMetaData } from "@/types/common";
+import { numWithCommas } from "@/utils/common";
+import { AnimatePresence, motion } from "framer-motion";
 import { useAtom, useAtomValue } from "jotai";
 import * as React from "react";
+import { useState } from "react";
 import ArchiveItemInfoDialog from "./ArchiveItemInfoDialog";
 import BlackholeObjects from "./BlackholeObjects";
 import SearchInput from "./SearchInput";
@@ -24,6 +28,8 @@ const ArchiveContainer = ({}: ArchiveContainerProps) => {
   );
   const [selectedTag, setSelectedTag] = useAtom(selectedTagAtom);
   const { archiveItemById, archiveItems } = useAtomValue(archiveItemsAtom);
+  const [selectedGroupMetaData, setSelectedGroupMetaData] =
+    useState<GroupMetaData>();
   const handleSelectItemOrGroup = (id: string) => {
     const archiveItem = archiveItemById[id];
 
@@ -33,8 +39,10 @@ const ArchiveContainer = ({}: ArchiveContainerProps) => {
 
     if (archiveItem.type === "group") {
       setSelectedTag(archiveItem.data.name);
+      setSelectedGroupMetaData(archiveItem.data.metaData);
     } else {
       setSelectedArchiveItemId(id);
+      setSelectedGroupMetaData(undefined);
     }
   };
 
@@ -95,6 +103,7 @@ const ArchiveContainer = ({}: ArchiveContainerProps) => {
             onSelectArchiveItem={handleSelectItemOrGroup}
             onBack={() => {
               setSelectedTag(undefined);
+              setSelectedGroupMetaData(undefined);
             }}
           />
         ) : (
@@ -110,14 +119,87 @@ const ArchiveContainer = ({}: ArchiveContainerProps) => {
         onSelectTag={(tag) => {
           setSelectedTag(tag);
           setSelectedArchiveItemId(undefined);
+
+          const group = groups.find((group) => group.name === tag);
+
+          if (group) {
+            setSelectedGroupMetaData(group.metaData);
+          }
         }}
         onClose={() => setSelectedArchiveItemId(undefined)}
       />
-      <div className="pointer-events-none fixed inset-x-0 bottom-0 flex justify-center pb-8">
-        <div className="pointer-events-auto flex max-w-full justify-center">
-          <SearchInput onSelectTag={setSelectedTag} />
-        </div>
-      </div>
+      {selectedGroupMetaData && (
+        <>
+          <motion.div
+            className="pointer-events-none fixed inset-x-0 top-0 flex justify-center pt-[6rem] md:pt-[10rem]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <dl className="pointer-events-auto flex flex-wrap items-center justify-center gap-x-4 gap-y-2 px-6">
+              <div className="flex items-center text-sm font-semibold">
+                <dt className="text-[#005212]">참조 코드</dt>
+                <div className="mx-2 h-5 w-[2px] bg-[#12F085]" />
+                <dd>{selectedGroupMetaData.referenceCode}</dd>
+              </div>
+              <div className="flex items-center text-sm font-semibold">
+                <dt className="text-[#005212]">계층 구분</dt>
+                <div className="mx-2 h-5 w-[2px] bg-[#12F085]" />
+                <dd>{selectedGroupMetaData.hierarchy}</dd>
+              </div>
+              {selectedGroupMetaData.hierarchy && (
+                <div className="flex items-center text-sm font-semibold">
+                  <dt className="text-[#005212]">자료 출처</dt>
+                  <div className="mx-2 h-5 w-[2px] bg-[#12F085]" />
+                  <dd>{selectedGroupMetaData.hierarchy}</dd>
+                </div>
+              )}
+              <div className="flex items-center text-sm font-semibold">
+                <dt className="text-[#005212]">생산자</dt>
+                <div className="mx-2 h-5 w-[2px] bg-[#12F085]" />
+                <dd>{selectedGroupMetaData.producer}</dd>
+              </div>
+              <div className="flex items-center text-sm font-semibold">
+                <dt className="text-[#005212]">생산 시기</dt>
+                <div className="mx-2 h-5 w-[2px] bg-[#12F085]" />
+                <dd>{selectedGroupMetaData.productionDate}</dd>
+              </div>
+              <div className="flex items-center text-sm font-semibold">
+                <dt className="text-[#005212]">자료 수량</dt>
+                <div className="mx-2 h-5 w-[2px] bg-[#12F085]" />
+                <dd>
+                  {selectedGroupMetaData.dataCountTemplate.replace(
+                    /\{.+\}/g,
+                    numWithCommas(archiveItemsGroupByTag.length),
+                  )}
+                </dd>
+              </div>
+            </dl>
+          </motion.div>
+          <motion.div
+            className="pointer-events-none fixed inset-x-0 bottom-0 flex justify-center pb-[6rem] md:pb-[10rem]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <p className="pointer-events-auto flex max-w-[42.5rem] flex-wrap items-center justify-center gap-x-4 gap-y-2 px-6 text-center">
+              {selectedGroupMetaData.hierarchyContent}
+            </p>
+          </motion.div>
+        </>
+      )}
+      {!selectedTag && !selectedArchiveItem && (
+        <motion.div
+          className="pointer-events-none fixed inset-x-0 bottom-0 flex justify-center pb-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <div className="pointer-events-auto flex max-w-full justify-center">
+            <SearchInput onSelectTag={setSelectedTag} />
+          </div>
+        </motion.div>
+      )}
     </>
   );
 };

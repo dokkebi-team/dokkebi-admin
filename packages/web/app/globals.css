@@ -99,6 +99,25 @@ body {
     src: url("/fonts/hail.woff2") format("woff2");
   }
 
+  .joystick {
+    > div > button {
+      box-shadow: 0 0 16px 10px #0f1bf5;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+
+      &::before {
+        content: "";
+        display: block;
+        width: 1px;
+        height: 1px;
+        border-radius: 50%;
+        background-color: #ffffff;
+        box-shadow: 0 0 10px 8px #ffffff;
+      }
+    }
+  }
+
   .markdown {
     @apply text-sm md:text-lg;
 

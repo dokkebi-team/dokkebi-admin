@@ -1,10 +1,19 @@
 import backgroundMd from "@/assets/background.md";
 import historyMd from "@/assets/history.md";
 import regionMd from "@/assets/region.md";
+import history1 from "@/public/hat/history1.png";
+import history2 from "@/public/hat/history2.png";
+import history3 from "@/public/hat/history3.png";
+import history4 from "@/public/hat/history4.png";
+import history5 from "@/public/hat/history5.png";
+import history6 from "@/public/hat/history6.png";
+import history7 from "@/public/hat/history7.png";
+import history8 from "@/public/hat/history8.png";
 import { cn } from "@/utils/ui";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import { motion, useAnimation } from "framer-motion";
 import Markdown from "markdown-to-jsx";
+import Image from "next/image";
 import * as React from "react";
 import { useEffect } from "react";
 import { Dialog, DialogContent, DialogTitle } from "./ui/dialog";
@@ -54,19 +63,19 @@ const HatDialog = ({ ...props }: HatDialogProps) => {
                 <TabsList className="z-0 flex justify-center">
                   <TabsTrigger
                     value="background"
-                    className="px-4 text-[1rem] font-bold text-white data-[state=active]:text-[#12F085] data-[state=active]:underline md:text-xl"
+                    className="px-4 text-[1rem] font-bold text-[#8ed3fb] data-[state=active]:text-[#12F085] data-[state=active]:underline md:text-xl"
                   >
                     도깨비월드 설정
                   </TabsTrigger>
                   <TabsTrigger
                     value="history"
-                    className="px-4 text-[1rem] font-bold text-white data-[state=active]:text-[#12F085] data-[state=active]:underline md:text-xl"
+                    className="px-4 text-[1rem] font-bold text-[#8ed3fb] data-[state=active]:text-[#12F085] data-[state=active]:underline md:text-xl"
                   >
                     히스토리
                   </TabsTrigger>
                   <TabsTrigger
                     value="region"
-                    className="px-4 text-[1rem] font-bold text-white data-[state=active]:text-[#12F085] data-[state=active]:underline md:text-xl"
+                    className="px-4 text-[1rem] font-bold text-[#8ed3fb] data-[state=active]:text-[#12F085] data-[state=active]:underline md:text-xl"
                   >
                     지역 설명
                   </TabsTrigger>
@@ -82,6 +91,14 @@ const HatDialog = ({ ...props }: HatDialogProps) => {
               <TabsContent value="history" asChild>
                 <Content>
                   <div className="markdown">
+                    <Image src={history1} alt="히스토리1" placeholder="blur" />
+                    <Image src={history2} alt="히스토리2" placeholder="blur" />
+                    <Image src={history3} alt="히스토리3" placeholder="blur" />
+                    <Image src={history4} alt="히스토리4" placeholder="blur" />
+                    <Image src={history5} alt="히스토리5" placeholder="blur" />
+                    <Image src={history6} alt="히스토리6" placeholder="blur" />
+                    <Image src={history7} alt="히스토리7" placeholder="blur" />
+                    <Image src={history8} alt="히스토리8" placeholder="blur" />
                     <Markdown>{historyMd}</Markdown>
                   </div>
                 </Content>
@@ -113,9 +130,20 @@ const Content = ({ children }: ContentProps) => {
         WebkitOverflowScrolling: "touch",
       }}
     >
-      <div className="flex flex-col items-center pb-safe-offset-20">
-        <p className="max-w-[40rem] px-5 text-white">{children}</p>
-      </div>
+      <motion.div
+        initial={{
+          opacity: 0,
+        }}
+        animate={{
+          opacity: 1,
+        }}
+        transition={{
+          duration: 2,
+        }}
+        className="flex flex-col items-center pb-safe-offset-20"
+      >
+        <p className="max-w-[40rem] px-5 text-[#8ed3fb]">{children}</p>
+      </motion.div>
     </ScrollArea>
   );
 };

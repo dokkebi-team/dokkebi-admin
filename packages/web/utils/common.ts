@@ -87,3 +87,7 @@ export const range = (start: number, end: number) => {
 export const dedupe = (arr: string[]) => {
   return Array.from(new Set(arr));
 };
+
+export const numWithCommas = (num: number) => {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};

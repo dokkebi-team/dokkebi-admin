@@ -155,12 +155,13 @@ const MobInfoDialog = ({
                   )}
                   <Image
                     src={mob.illustrationUrl}
-                    width={240}
-                    height={240}
+                    width={220}
+                    height={220}
                     alt=""
                     onLoad={() => {
                       setIsLoadingComplete(true);
                     }}
+                    unoptimized
                   />
                 </div>
                 <div className="absolute bottom-[6%] left-0 right-0 flex justify-center">
@@ -169,41 +170,60 @@ const MobInfoDialog = ({
               </div>
             }
             backContent={
-              <div className="flex w-full flex-col py-10">
-                <div className="flex-none px-6">
-                  <h2 className="mb-4 text-2xl font-bold">{mob.name}</h2>
-                  <dl className="flex items-center space-x-4">
-                    <div className="flex items-center text-sm font-semibold">
-                      <dt className="text-[#005212]">지역</dt>
-                      <div className="mx-2 h-5 w-[2px] bg-[#12F085]" />
-                      <dd>{mob.regionName}</dd>
-                    </div>
-                    <div className="flex items-center text-sm font-semibold">
-                      <dt className="text-[#005212]">넘버</dt>
-                      <div className="mx-2 h-5 w-[2px] bg-[#12F085]" />
-                      <dd>{mob.inventoryNo}</dd>
-                    </div>
-                  </dl>
+              <div className="flex w-full flex-col bg-black py-10">
+                <div className="absolute inset-x-0 inset-y-0 z-0 flex items-center justify-center">
+                  <Image
+                    src={mob.illustrationUrl}
+                    width={220}
+                    height={220}
+                    alt=""
+                    unoptimized
+                  />
+                  <div className="absolute inset-x-0 inset-y-0 bg-black/50" />
                 </div>
-                <div className="mt-3 flex-1 overflow-auto">
-                  <p className="px-6">{mob.notes}</p>
-                </div>
-                {mob.discordChannelUrl && (
-                  <div className="mt-3 px-6 text-right">
-                    <Button variant="outline" asChild>
-                      <a
-                        href={mob.discordChannelUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                        }}
-                      >
-                        도깨비 소문
-                      </a>
-                    </Button>
+                <div className="z-[1] flex flex-1 flex-col overflow-hidden">
+                  <div className="flex-none px-6">
+                    <h2 className="mb-4 text-2xl font-bold text-[#8ed3fb]">
+                      {mob.name || "???"}
+                    </h2>
+                    <dl className="flex items-center gap-x-4 gap-y-2 text-[#8ed3fb]">
+                      <div className="flex items-center text-sm font-semibold">
+                        <dt>지역</dt>
+                        <div className="mx-2 h-5 w-[2px] bg-[#12F085]" />
+                        <dd>{mob.regionName}</dd>
+                      </div>
+                      <div className="flex items-center text-sm font-semibold">
+                        <dt>넘버</dt>
+                        <div className="mx-2 h-5 w-[2px] bg-[#12F085]" />
+                        <dd>{mob.inventoryNo}</dd>
+                      </div>
+                      <div className="flex items-center text-sm font-semibold">
+                        <dt>종족</dt>
+                        <div className="mx-2 h-5 w-[2px] bg-[#12F085]" />
+                        <dd>{mob.type}</dd>
+                      </div>
+                    </dl>
                   </div>
-                )}
+                  <div className="mt-3 flex-1 overflow-auto">
+                    <p className="px-6 text-[#8ed3fb]">{mob.notes}</p>
+                  </div>
+                  {mob.discordChannelUrl && (
+                    <div className="mt-3 flex-none px-6 pb-2 text-right">
+                      <Button variant="outline" asChild>
+                        <a
+                          href={mob.discordChannelUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
+                        >
+                          도깨비 소문
+                        </a>
+                      </Button>
+                    </div>
+                  )}
+                </div>
               </div>
             }
           />

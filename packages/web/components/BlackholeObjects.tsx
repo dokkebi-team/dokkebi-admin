@@ -10,7 +10,7 @@ import { motion } from "framer-motion";
 import { produce } from "immer";
 import { useAtomValue } from "jotai";
 import { XIcon } from "lucide-react";
-import { ReactNode, useMemo, useRef, useState } from "react";
+import { ReactNode, Suspense, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 
 const OBJECT_COUNT = 20;
@@ -49,35 +49,39 @@ const BlackholeObjects = ({
         duration: 1,
       }}
     >
-      <Canvas
-        camera={{ position: [0, 0, 40], fov: 60 }}
-        style={{
-          flex: 1,
-        }}
-      >
-        <ArchiveItemsProvider archiveItems={archiveItems}>
-          {selectedTag && (
-            <mesh>
-              <Html center zIndexRange={[100, 100]}>
-                <div
-                  className="flex aspect-square h-[9.5rem] items-center justify-center rounded-full bg-[#D1FF4E] md:h-[12.5rem]"
-                  role="button"
-                >
-                  <div className="absolute inset-x-0 bottom-0 pb-4 text-center">
-                    <button className="p-2" onClick={onBack} type="button">
-                      <XIcon />
-                    </button>
+      <Suspense>
+        <Canvas
+          camera={{ position: [0, 0, 40], fov: 60 }}
+          style={{
+            flex: 1,
+          }}
+        >
+          <ArchiveItemsProvider archiveItems={archiveItems}>
+            {selectedTag && (
+              <mesh>
+                <Html center zIndexRange={[100, 100]}>
+                  <div
+                    className="flex aspect-square h-[9.5rem] items-center justify-center rounded-full bg-[#D1FF4E] shadow-[0_0_16px_10px_#D1FF4E] md:h-[12.5rem]"
+                    role="button"
+                  >
+                    <div className="absolute inset-x-0 bottom-0 pb-4 text-center">
+                      <button className="p-2" onClick={onBack} type="button">
+                        <XIcon />
+                      </button>
+                    </div>
+                    <div className="text-center text-[1.375rem] font-bold leading-[1.14] md:text-[2.5rem]">
+                      #{selectedTag}
+                    </div>
                   </div>
-                  <div className="text-center text-[1.75rem] font-bold leading-none md:text-[2.5rem]">
-                    #{selectedTag}
-                  </div>
-                </div>
-              </Html>
-            </mesh>
-          )}
-          <FloatingObjectsContainer onSelectArchiveItem={onSelectArchiveItem} />
-        </ArchiveItemsProvider>
-      </Canvas>
+                </Html>
+              </mesh>
+            )}
+            <FloatingObjectsContainer
+              onSelectArchiveItem={onSelectArchiveItem}
+            />
+          </ArchiveItemsProvider>
+        </Canvas>
+      </Suspense>
     </motion.div>
   );
 };
@@ -262,11 +266,11 @@ const FloatingObject = ({
       <Html transform scale={0.5} zIndexRange={[50, 0]}>
         {archiveItem.type === "group" ? (
           <div
-            className="flex aspect-square h-[12.5rem] items-center justify-center rounded-full bg-[#D1FF4E] transition-transform hover:scale-110"
+            className="flex aspect-square h-[12.5rem] items-center justify-center rounded-full bg-[#D1FF4E] shadow-[0_0_16px_10px_#D1FF4E] transition-transform hover:scale-110"
             role="button"
             onClick={() => onSelectArchiveItem(archiveItem.id)}
           >
-            <div className="text-center text-[2.5rem] font-bold leading-none">
+            <div className="text-center text-[2rem] font-bold leading-none">
               #{archiveItem.data.name}
             </div>
           </div>
@@ -283,8 +287,8 @@ const FloatingObject = ({
             onClick={() => onSelectArchiveItem(archiveItem.id)}
           />
         ) : (
-          <div className="h-50 flex aspect-square items-center justify-center rounded-full bg-[#00FF66]">
-            <div className="text-center text-[2.5rem] leading-none">
+          <div className="h-50 flex aspect-square items-center justify-center rounded-full bg-[#D1FF4E] shadow-[0_0_16px_10px_#D1FF4E]">
+            <div className="text-center text-[2rem] leading-none">
               #{archiveItem.data.name}
             </div>
           </div>

@@ -20,6 +20,7 @@ import BackgroundSoundProvider, {
 import { BangRef } from "./Bang";
 import Camera from "./Camera";
 import HatDialog from "./HatDialog";
+import MapAssets from "./MapAssets";
 import MobileController from "./MobileController";
 import MobInfoDialog from "./MobInfoDialog";
 import Mobs from "./Mobs";
@@ -37,8 +38,7 @@ export interface AppRef {
 }
 
 const RESOURCES = [
-  // "/map.png",
-  "/map_next.png",
+  "/map_resized.png",
   "/playerDown.png",
   "/playerUp.png",
   "/playerLeft.png",
@@ -109,29 +109,35 @@ const App = ({}: AppProps) => {
       {isAppStarted && !selectedMobInventoryNo && (
         <>
           <MobileController />
-          <Portal container={document.documentElement}>
-            <a
-              className="scale-1 canhover:hover:scale-90 group fixed left-10 z-[100] aspect-square h-[4.625rem] w-[4.625rem] overflow-hidden rounded-full bg-[radial-gradient(white_0%,#FFF538_60%)] p-2 shadow-[0px_0px_16px_0px_#FFF538] transition-transform bottom-safe-offset-10 active:scale-90 md:h-[6.25rem] md:w-[6.25rem]"
-              type="button"
-              target="_blank"
-              href="/archive"
-              rel="noreferrer"
-            >
-              <Image
-                className={cn(
-                  "h-full w-full transition-transform group-active:rotate-45",
-                )}
-                src={clubImage}
-                alt="아카이브"
-                width={100}
-                height={100}
-                unoptimized
-              />
-            </a>
-          </Portal>
+          {!showHatDialog && (
+            <Portal container={document.documentElement}>
+              <a
+                className="scale-1 canhover:hover:scale-90 group fixed left-10 z-[100] aspect-square h-[4.625rem] w-[4.625rem] overflow-hidden rounded-full bg-[radial-gradient(white_0%,#FFF538_60%)] p-2 transition-transform bottom-safe-offset-10 active:scale-90 md:h-[6.25rem] md:w-[6.25rem]"
+                type="button"
+                target="_blank"
+                href="/archive"
+                rel="noreferrer"
+              >
+                <Image
+                  className={cn(
+                    "h-full w-full transition-transform group-active:rotate-45",
+                  )}
+                  src={clubImage}
+                  alt="아카이브"
+                  width={100}
+                  height={100}
+                  unoptimized
+                />
+              </a>
+            </Portal>
+          )}
           <Portal container={document.documentElement}>
             <button
-              className="scale-1 canhover:hover:scale-90 fixed right-10 z-[100] aspect-square h-[4.625rem] w-[4.625rem] overflow-hidden rounded-full bg-[radial-gradient(white_0%,#FFF538_60%)] p-2 shadow-[0px_0px_16px_0px_#FFF538] transition-transform bottom-safe-offset-10 active:scale-90 md:h-[6.25rem] md:w-[6.25rem]"
+              className={cn(
+                "scale-1 canhover:hover:scale-90 fixed right-10 z-[100] aspect-square h-[4.625rem] w-[4.625rem] overflow-hidden rounded-full bg-[radial-gradient(white_0%,#FFF538_60%)] p-2 transition-transform bottom-safe-offset-10 active:scale-90 md:h-[6.25rem] md:w-[6.25rem]",
+                showHatDialog &&
+                  "bg-[radial-gradient(#ffffff57_0%,#fff53854_60%)] shadow-[0_0_20px_5px_#fff53878]",
+              )}
               type="button"
               onClick={(e) => {
                 setShowHatDialog((prev) => !prev);
@@ -174,7 +180,7 @@ const StateContainer = ({ children }: StateContainerProps) => {
 
   return (
     <>
-      <Stage {...size} options={{ backgroundColor: 0x005ed0 }}>
+      <Stage {...size}>
         <ContextBridge>
           <BackgroundSoundProvider>{children}</BackgroundSoundProvider>
         </ContextBridge>
@@ -204,6 +210,7 @@ const Park = ({ isPlaying, playSound, onSelectMob }: ParkProps) => {
       {/*<VideoTrigger />*/}
       <Player isPlaying={isPlaying} />
       <Mobs isPlaying={isPlaying} onSelectMob={onSelectMob} />
+      <MapAssets />
     </Container>
   );
 };
@@ -226,7 +233,7 @@ const Map = ({ playSound }: MapProps) => {
     };
   }, [playSound]);
 
-  const texture = PIXI.utils.TextureCache["/map_next.png"];
+  const texture = PIXI.utils.TextureCache["/map_resized.png"];
   // const texture = PIXI.utils.TextureCache['/map_with_mobs_info.png']
   return <Sprite texture={texture} anchor={0} width={2048} height={5615} />;
 };

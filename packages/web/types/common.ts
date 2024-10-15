@@ -19,10 +19,28 @@ export interface BoundaryItem {
   height: number;
 }
 
+export interface GroupMetaData {
+  // 참조 코드
+  referenceCode: string;
+  // 계층 구분
+  hierarchy: string;
+  // 자료 출처
+  dataSource?: string;
+  // 생산자
+  producer: string;
+  // 생산시기
+  productionDate: string;
+  // 계층 내용
+  hierarchyContent: string;
+  // 자료 수량
+  dataCountTemplate: string;
+}
+
 export interface Group {
   id: string;
   name: string;
   tags: string[];
+  metaData: GroupMetaData;
 }
 
 export interface Item {

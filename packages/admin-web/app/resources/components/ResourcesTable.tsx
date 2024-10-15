@@ -31,7 +31,7 @@ export const getUrlOrigin = () => {
   } else if (isProd) {
     return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
   } else {
-    return `http://localhost:${process.env.PORT || "3000"}`;
+    return `http://localhost:${process.env.PORT || "3001"}`;
   }
 };
 

@@ -9,11 +9,12 @@ const MobileController = ({}: MobileControllerProps) => {
 
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-0 flex justify-center px-10 pb-safe-offset-10 lg:hidden">
-      <div className="pointer-events-auto select-none">
+      <div className="joystick pointer-events-auto select-none">
         <Joystick
           size={100}
-          baseColor="#091eaa69"
-          stickColor="#091eaa"
+          stickSize={50}
+          baseColor="#0f1bf50d"
+          stickColor="#0f1bf5"
           move={(e) => {
             if (e.direction === "FORWARD") {
               setMobileKeyControls({
