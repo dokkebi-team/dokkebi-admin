@@ -61,9 +61,11 @@ const PngSequencePlayer = ({
     width,
   ]);
 
-  console.log(stageSize, offset);
-
   useTick((delta) => {
+    if (!show) {
+      return;
+    }
+
     setElapsed(elapsed + delta);
 
     if (elapsed > 1 / fps) {

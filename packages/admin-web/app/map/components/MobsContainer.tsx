@@ -274,67 +274,63 @@ const MobsContainer = ({}: MobsContainerProps) => {
                   unoptimized
                 />
               </div>
-              {Object.entries(mobsData).map(
-                ([inventoryNo, { x, y, scale }]) => {
-                  const mob = data.find(
-                    (mob) => mob.inventoryNo === inventoryNo
-                  );
-                  const disabled = currentMobInventoryNo !== inventoryNo;
+              {data.map((mob) => {
+                const positionData = mobsData[mob.inventoryNo];
+                const disabled = currentMobInventoryNo !== mob.inventoryNo;
 
-                  if (!mob) {
-                    return null;
-                  }
-
-                  return (
-                    <MoveableMob
-                      key={inventoryNo}
-                      disabled={disabled}
-                      mob={mob}
-                      x={x}
-                      y={y}
-                      scale={scale}
-                      moveableProps={{
-                        onDragStart: () => {
-                          if (disabled) {
-                            return;
-                          }
-
-                          setDisablePanning(true);
-                        },
-                        onDragEnd: () => {
-                          if (disabled) {
-                            return;
-                          }
-
-                          setDisablePanning(false);
-                        },
-                        onClick: () => {
-                          setCurrentMobInventoryNo(inventoryNo);
-                        },
-                      }}
-                      onChangePosition={(x, y) => {
-                        setMobsData((prev) => ({
-                          ...prev,
-                          [inventoryNo]: {
-                            ...prev[inventoryNo],
-                            x,
-                            y,
-                          },
-                        }));
-                      }}
-                      onChangeScale={(scale) => {
-                        setMobsData((prev) => ({
-                          ...prev,
-                          [inventoryNo]: {
-                            ...prev[inventoryNo],
-                            scale,
-                          },
-                        }));
-                      }}
-                    />
-                  );
+                if (!positionData) {
+                  return null;
                 }
-              )}
+
+                return (
+                  <MoveableMob
+                    key={mob.inventoryNo}
+                    disabled={disabled}
+                    mob={mob}
+                    x={positionData.x}
+                    y={positionData.y}
+                    scale={positionData.scale}
+                    moveableProps={{
+                      onDragStart: () => {
+                        if (disabled) {
+                          return;
+                        }
+
+                        setDisablePanning(true);
+                      },
+                      onDragEnd: () => {
+                        if (disabled) {
+                          return;
+                        }
+
+                        setDisablePanning(false);
+                      },
+                      onClick: () => {
+                        setCurrentMobInventoryNo(mob.inventoryNo);
+                      },
+                    }}
+                    onChangePosition={(x, y) => {
+                      setMobsData((prev) => ({
+                        ...prev,
+                        [mob.inventoryNo]: {
+                          ...prev[mob.inventoryNo],
+                          x,
+                          y,
+                        },
+                      }));
+                    }}
+                    onChangeScale={(scale) => {
+                      setMobsData((prev) => ({
+                        ...prev,
+                        [mob.inventoryNo]: {
+                          ...prev[mob.inventoryNo],
+                          scale,
+                        },
+                      }));
+                    }}
+                  />
+                );
+              })}
               {currentMob && !isCurrentMobPlaced && (
                 <CursorMob
                   x={cursorPosition.x}

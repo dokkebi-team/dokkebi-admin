@@ -195,7 +195,6 @@ export const Player = ({ isPlaying }: PlayerProps) => {
     // }
 
     if (nextPosition) {
-      console.log("nextPosition", nextPosition);
       setPlayer((prev) => ({
         ...prev,
         position: nextPosition,
