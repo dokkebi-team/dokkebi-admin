@@ -16,6 +16,7 @@ import { useState } from "react";
 import ArchiveItemInfoDialog from "./ArchiveItemInfoDialog";
 import BlackholeObjects from "./BlackholeObjects";
 import SearchInput from "./SearchInput";
+import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 
 export interface ArchiveContainerProps {
   children?: React.ReactNode;
@@ -131,7 +132,7 @@ const ArchiveContainer = ({}: ArchiveContainerProps) => {
       {selectedGroupMetaData && (
         <>
           <motion.div
-            className="pointer-events-none fixed inset-x-0 top-0 flex justify-center pt-[6rem] md:pt-[10rem]"
+            className="pointer-events-none fixed inset-x-0 top-0 flex justify-center pt-8 md:pt-[10rem]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -177,14 +178,17 @@ const ArchiveContainer = ({}: ArchiveContainerProps) => {
             </dl>
           </motion.div>
           <motion.div
-            className="pointer-events-none fixed inset-x-0 bottom-0 flex justify-center pb-[6rem] md:pb-[10rem]"
+            className="pointer-events-none fixed inset-x-0 bottom-0 flex justify-center pb-8 md:pb-[10rem]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <p className="pointer-events-auto flex max-w-[42.5rem] flex-wrap items-center justify-center gap-x-4 gap-y-2 px-6 text-center">
-              {selectedGroupMetaData.hierarchyContent}
-            </p>
+            <ScrollArea className="max-h-[calc((100vh-9rem)/2-2rem-2rem)]">
+              <p className="pointer-events-auto flex max-w-[42.5rem] flex-wrap items-center justify-center gap-x-4 gap-y-2 px-6 text-center">
+                {selectedGroupMetaData.hierarchyContent}
+              </p>
+              <ScrollBar />
+            </ScrollArea>
           </motion.div>
         </>
       )}
