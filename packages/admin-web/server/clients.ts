@@ -1,4 +1,4 @@
-import { PrismaClientDbMain, PrismaManager } from "@dokkebi-admin/db";
+import { PrismaClientDbMain, PrismaManager } from "@dokkebi-world/db";
 
 type MsgOrErrorFactory = string | (() => Error);
 
