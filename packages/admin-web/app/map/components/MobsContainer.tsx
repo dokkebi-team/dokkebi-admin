@@ -266,7 +266,13 @@ const MobsContainer = ({}: MobsContainerProps) => {
                   height: 5615,
                 }}
               >
-                <Image src={mapImg} width={2048} height={5615} alt="" />
+                <Image
+                  src={mapImg}
+                  width={2048}
+                  height={5615}
+                  alt=""
+                  unoptimized
+                />
               </div>
               {Object.entries(mobsData).map(
                 ([inventoryNo, { x, y, scale }]) => {
@@ -414,13 +420,14 @@ const Mob = forwardRef<HTMLDivElement, MobProps>(({ mob }, ref) => {
         <Skeleton className="absolute left-0 right-0 top-0 bottom-0" />
       )}
       <Image
-        src={mob.illustrationUrl}
+        src={mob.optimizedIllustrationUrl}
         width={256}
         height={256}
         alt=""
         onLoadingComplete={() => {
           setIsLoadingComplete(true);
         }}
+        unoptimized
       />
     </div>
   );

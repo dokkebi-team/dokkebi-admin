@@ -215,7 +215,7 @@ const ResourcesTable = ({}: ResourcesTableProps) => {
             <div>
               <Button type="button">upload</Button>
             </div>
-            <Image src={urls[0]} width={200} height={200} alt="" />
+            <Image src={urls[0]} width={200} height={200} alt="" unoptimized />
           </div>
         );
       }}
