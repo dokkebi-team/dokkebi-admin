@@ -112,7 +112,7 @@ const App = ({}: AppProps) => {
           {!showHatDialog && (
             <Portal container={document.documentElement}>
               <a
-                className="scale-1 canhover:hover:scale-90 group fixed left-10 z-[100] aspect-square h-[4.625rem] w-[4.625rem] overflow-hidden rounded-full bg-[radial-gradient(white_0%,#FFF538_60%)] p-2 transition-transform bottom-safe-offset-10 active:scale-90 md:h-[6.25rem] md:w-[6.25rem]"
+                className="scale-1 canhover:hover:scale-90 group fixed left-10 z-[100] aspect-square h-[4.625rem] w-[4.625rem] overflow-hidden rounded-full bg-[radial-gradient(white_0%,#FFF538_60%)] p-2 transition-transform bottom-safe-offset-12 active:scale-90 lg:h-[6.25rem] lg:w-[6.25rem]"
                 type="button"
                 target="_blank"
                 href="/archive"
@@ -134,7 +134,7 @@ const App = ({}: AppProps) => {
           <Portal container={document.documentElement}>
             <button
               className={cn(
-                "scale-1 canhover:hover:scale-90 fixed right-10 z-[100] aspect-square h-[4.625rem] w-[4.625rem] overflow-hidden rounded-full bg-[radial-gradient(white_0%,#FFF538_60%)] p-2 transition-transform bottom-safe-offset-10 active:scale-90 md:h-[6.25rem] md:w-[6.25rem]",
+                "scale-1 canhover:hover:scale-90 fixed right-10 z-[100] aspect-square h-[4.625rem] w-[4.625rem] overflow-hidden rounded-full bg-[radial-gradient(white_0%,#FFF538_60%)] p-2 transition-transform bottom-safe-offset-12 active:scale-90 lg:h-[6.25rem] lg:w-[6.25rem]",
                 showHatDialog &&
                   "bg-[radial-gradient(#ffffff57_0%,#fff53854_60%)] shadow-[0_0_20px_5px_#fff53878]",
               )}

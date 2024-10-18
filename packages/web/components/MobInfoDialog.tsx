@@ -258,6 +258,7 @@ const RankSymbols = ({ type, rank }: RankSymbolsProps) => {
             height={size}
             placeholder="blur"
             alt=""
+            unoptimized
           />
         </div>
       ))}

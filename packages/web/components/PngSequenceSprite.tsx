@@ -36,14 +36,14 @@ const PngSequencePlayer = ({
 
   const show = useMemo(() => {
     if (
-      rest.x < player.position.x - width * anchor[0] - offset ||
+      rest.x < player.position.x - width * (1 - anchor[0]) - offset ||
       rest.x > player.position.x + width * anchor[0] + offset
     ) {
       return false;
     }
 
     if (
-      rest.y < player.position.y - height * anchor[1] - offset ||
+      rest.y < player.position.y - height * (1 - anchor[1]) - offset ||
       rest.y > player.position.y + height * anchor[1] + offset
     ) {
       return false;
@@ -60,6 +60,8 @@ const PngSequencePlayer = ({
     rest.y,
     width,
   ]);
+
+  console.log(stageSize, offset);
 
   useTick((delta) => {
     setElapsed(elapsed + delta);

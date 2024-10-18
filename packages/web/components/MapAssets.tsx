@@ -1,7 +1,10 @@
+import { playerAtom } from "@/stores/map";
 import { Sprite } from "@pixi/react";
+import { useAtomValue } from "jotai";
 import * as PIXI from "pixi.js";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import PngSequencePlayer from "./PngSequenceSprite";
+import { useStageSize } from "./StageSizeProvider";
 
 export interface MapAssetsProps {}
 
@@ -23,7 +26,7 @@ const MapAssets = ({}: MapAssetsProps) => {
 
   return (
     <>
-      <Sprite
+      <LazySprite
         texture={skyTexture}
         anchor={[0, 0]}
         scale={1}
@@ -33,7 +36,7 @@ const MapAssets = ({}: MapAssetsProps) => {
         y={0}
         zIndex={-1}
       />
-      <Sprite
+      <LazySprite
         texture={skyTexture}
         anchor={[0, 0]}
         scale={1}
@@ -43,7 +46,7 @@ const MapAssets = ({}: MapAssetsProps) => {
         y={0}
         zIndex={-1}
       />
-      <Sprite
+      <LazySprite
         texture={skyTexture}
         anchor={[1, 0]}
         scale={1}
@@ -53,7 +56,7 @@ const MapAssets = ({}: MapAssetsProps) => {
         y={1420}
         zIndex={-1}
       />
-      <Sprite
+      <LazySprite
         texture={skyTexture}
         anchor={[1, 0]}
         scale={1}
@@ -63,7 +66,7 @@ const MapAssets = ({}: MapAssetsProps) => {
         y={1996}
         zIndex={-1}
       />
-      <Sprite
+      <LazySprite
         texture={skyTexture}
         anchor={[1, 0]}
         scale={1}
@@ -73,7 +76,7 @@ const MapAssets = ({}: MapAssetsProps) => {
         y={2572}
         zIndex={-1}
       />
-      <Sprite
+      <LazySprite
         texture={skyTexture}
         anchor={[1, 0]}
         scale={1}
@@ -83,7 +86,7 @@ const MapAssets = ({}: MapAssetsProps) => {
         y={3148}
         zIndex={-1}
       />
-      <Sprite
+      <LazySprite
         texture={skyTexture}
         anchor={[1, 0]}
         scale={1}
@@ -93,7 +96,7 @@ const MapAssets = ({}: MapAssetsProps) => {
         y={3724}
         zIndex={-1}
       />
-      <Sprite
+      <LazySprite
         texture={skyTexture}
         anchor={[1, 0]}
         scale={1}
@@ -103,7 +106,7 @@ const MapAssets = ({}: MapAssetsProps) => {
         y={4300}
         zIndex={-1}
       />
-      <Sprite
+      <LazySprite
         texture={skyTexture}
         anchor={[1, 0]}
         scale={1}
@@ -113,7 +116,7 @@ const MapAssets = ({}: MapAssetsProps) => {
         y={4876}
         zIndex={-1}
       />
-      <Sprite
+      <LazySprite
         texture={skyTexture}
         anchor={[1, 0]}
         scale={1}
@@ -935,15 +938,52 @@ const MapAssets = ({}: MapAssetsProps) => {
   );
 };
 
+interface LazySpriteProps
+  extends React.ComponentPropsWithoutRef<typeof Sprite> {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  anchor?: [number, number];
+}
+
+const LazySprite = ({ anchor = [0, 0], ...rest }: LazySpriteProps) => {
+  const stageSize = useStageSize();
+  const offset = Math.max(stageSize.width, stageSize.height) / 2;
+  const player = useAtomValue(playerAtom);
+
+  const show = useMemo(() => {
+    if (
+      rest.x < player.position.x - rest.width * (1 - anchor[0]) - offset ||
+      rest.x > player.position.x + rest.width * anchor[0] + offset
+    ) {
+      return false;
+    }
+
+    if (
+      rest.y < player.position.y - rest.height * (1 - anchor[1]) - offset ||
+      rest.y > player.position.y + rest.height * anchor[1] + offset
+    ) {
+      return false;
+    }
+
+    return true;
+  }, [
+    anchor,
+    offset,
+    player.position.x,
+    player.position.y,
+    rest.height,
+    rest.width,
+    rest.x,
+    rest.y,
+  ]);
+
+  if (!show) {
+    return null;
+  }
+
+  return <Sprite anchor={anchor} {...rest} />;
+};
+
 export default MapAssets;
-
-/*
-
-1. 3-2zeakul , 3-2market  : 흰색 좁쌀달믄것들, 제아쿨이라 읽음ㅋ 그리고 가장 좌측에는 마켓
-
-2. 지도_안개_resize.png, rainbow   : 우측에 안개랑 안개 밑에 무지개 피엔지 시퀀스. 근데 안개는 가장 상단 레이어로 허수깨비랑 도깨비보다 위에 있어야 할거 같은데.. 이거는 일단 패스하고 넘어가도 될듯
-
-3. 13togri  : 어제한 깨숑 뽀숑 하단에 모래땅 위에 흰색 쫌쫌따리, 토그리라 읽음 ㅎㅎ
-
-4. 14bongdang , 17chunjiin, 18bambam :   가운데 큰 땅 14봉당, 우측 상단 17천지인, 우측 하단 18밤밤, 왼쪽에 그림자달믄건 무시!
-*/

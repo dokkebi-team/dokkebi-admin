@@ -8,7 +8,7 @@ const MobileController = ({}: MobileControllerProps) => {
   const setMobileKeyControls = useSetAtom(mobileKeyControlsAtom);
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-0 flex justify-center px-10 pb-safe-offset-10 lg:hidden">
+    <div className="pointer-events-none fixed inset-x-0 bottom-0 flex justify-center px-10 pb-safe-offset-9 lg:hidden">
       <div className="joystick pointer-events-auto select-none">
         <Joystick
           size={100}
