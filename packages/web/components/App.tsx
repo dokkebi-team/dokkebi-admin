@@ -12,7 +12,6 @@ import { Container, Sprite, Stage } from "@pixi/react";
 import { Portal } from "@radix-ui/react-portal";
 import { useAtom, useAtomValue } from "jotai";
 import Image from "next/image";
-import * as PIXI from "pixi.js";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import BackgroundSoundProvider, {
   useBackgroundSound,
@@ -234,9 +233,9 @@ const Map = ({ playSound }: MapProps) => {
     };
   }, [playSound]);
 
-  const texture = PIXI.utils.TextureCache["/map_resized2.png"];
-  // const texture = PIXI.utils.TextureCache['/map_with_mobs_info.png']
-  return <Sprite texture={texture} anchor={0} width={2048} height={5615} />;
+  return (
+    <Sprite image={"/map_resized2.png"} anchor={0} width={2048} height={5615} />
+  );
 };
 
 export default App;
