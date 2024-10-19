@@ -149,7 +149,7 @@ const MobInfoDialog = ({
                 <div className="absolute left-0 right-0 top-0 flex justify-center">
                   <Title3D>{mob.name}</Title3D>
                 </div>
-                <div className="relative flex aspect-square w-full flex-1 items-center justify-center">
+                <div className="relative flex aspect-square w-full flex-1 select-none items-center justify-center">
                   {!isLoadingComplete && (
                     <Skeleton className="absolute bottom-0 left-0 right-0 top-0" />
                   )}
@@ -164,14 +164,14 @@ const MobInfoDialog = ({
                     unoptimized
                   />
                 </div>
-                <div className="absolute bottom-[6%] left-0 right-0 flex justify-center">
+                <div className="absolute bottom-[6%] left-0 right-0 flex select-none justify-center">
                   <RankSymbols type={mob.type} rank={mob.rank} />
                 </div>
               </div>
             }
             backContent={
               <div className="flex w-full flex-col bg-black py-10">
-                <div className="absolute inset-x-0 inset-y-0 z-0 flex items-center justify-center">
+                <div className="pointer-events-none absolute inset-x-0 inset-y-0 z-0 flex items-center justify-center">
                   <Image
                     src={mob.illustrationUrl}
                     width={220}

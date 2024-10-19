@@ -74,7 +74,16 @@ const ResourceLoader = ({
             </p>
           </BlurIn>
         </div>
-        <div>
+        <div
+          role={isLoading ? undefined : "button"}
+          onClick={() => {
+            if (!isLoadingComplete) {
+              return;
+            }
+
+            setIsAppStarted(true);
+          }}
+        >
           <Image src={loadingImg} height={300} width={300} alt="" unoptimized />
         </div>
         {/* <div className="w-full border-[1px] border-[#67FF5B]">
