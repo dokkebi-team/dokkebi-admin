@@ -38,7 +38,8 @@ export interface AppRef {
 }
 
 const RESOURCES = [
-  "/map_resized.png",
+  // "/map_resized.png",
+  "/map_resized2.png",
   "/playerDown.png",
   "/playerUp.png",
   "/playerLeft.png",
@@ -233,7 +234,7 @@ const Map = ({ playSound }: MapProps) => {
     };
   }, [playSound]);
 
-  const texture = PIXI.utils.TextureCache["/map_resized.png"];
+  const texture = PIXI.utils.TextureCache["/map_resized2.png"];
   // const texture = PIXI.utils.TextureCache['/map_with_mobs_info.png']
   return <Sprite texture={texture} anchor={0} width={2048} height={5615} />;
 };
