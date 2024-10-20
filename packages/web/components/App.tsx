@@ -12,6 +12,7 @@ import { Container, Sprite, Stage } from "@pixi/react";
 import { Portal } from "@radix-ui/react-portal";
 import { useAtom, useAtomValue } from "jotai";
 import Image from "next/image";
+import * as PIXI from "pixi.js";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import BackgroundSoundProvider, {
   useBackgroundSound,
@@ -36,10 +37,15 @@ export interface AppRef {
   playBang: () => void;
 }
 
+const isAndroid =
+  typeof window !== "undefined" && /Android/i.test(navigator.userAgent);
+
+const MAP_RESOURCE = isAndroid ? "/map_resized3.png" : "/map_resized.png";
+
 const RESOURCES = [
   // "/map_resized.png",
   // "/map_resized2.png",
-  "/map_resized3.png",
+  MAP_RESOURCE,
   "/playerDown.png",
   "/playerUp.png",
   "/playerLeft.png",
@@ -222,6 +228,7 @@ interface MapProps {
 
 const Map = ({ playSound }: MapProps) => {
   const { play, stop, pause } = useBackgroundSound();
+  const [texture] = useState(() => PIXI.utils.TextureCache[MAP_RESOURCE]);
 
   useEffect(() => {
     if (playSound) {
@@ -234,9 +241,7 @@ const Map = ({ playSound }: MapProps) => {
     };
   }, [playSound]);
 
-  return (
-    <Sprite image={"/map_resized3.png"} anchor={0} width={2048} height={5615} />
-  );
+  return <Sprite texture={texture} anchor={0} width={2048} height={5615} />;
 };
 
 export default App;
