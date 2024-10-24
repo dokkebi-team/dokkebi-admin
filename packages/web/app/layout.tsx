@@ -45,6 +45,12 @@ const pretendardFont = localFont({
 
 export const metadata: Metadata = {
   title: "Dokkebi World",
+  description: "Welcome to D⃣o⃣k⃣k⃣e⃣b⃣i⃣ W⃣o⃣r⃣l⃣d⃣",
+  openGraph: {
+    title: "Dokkebi World",
+    description: "Welcome to D⃣o⃣k⃣k⃣e⃣b⃣i⃣ W⃣o⃣r⃣l⃣d⃣",
+    images: "https://dokkebi.world/og.png",
+  },
 };
 
 export default function RootLayout({
