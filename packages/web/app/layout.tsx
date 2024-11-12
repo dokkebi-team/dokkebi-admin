@@ -51,6 +51,10 @@ export const metadata: Metadata = {
     description: "Welcome to D⃣o⃣k⃣k⃣e⃣b⃣i⃣ W⃣o⃣r⃣l⃣d⃣",
     images: "https://dokkebi.world/og.png",
   },
+  appleWebApp: {
+    statusBarStyle: "black-translucent",
+    capable: true,
+  },
 };
 
 export default function RootLayout({
