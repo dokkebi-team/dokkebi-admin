@@ -1,6 +1,5 @@
-import backgroundMd from "@/assets/background.md";
-import historyMd from "@/assets/history.md";
-import regionMd from "@/assets/region.md";
+import dokkebifestMd from "@/assets/about-dokkebifest.md";
+import dokkebiworldMd from "@/assets/about-dokkebiworld.md";
 import { cn } from "@/utils/ui";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import { motion, useAnimation } from "framer-motion";
@@ -15,10 +14,10 @@ import {
 } from "./ui/dialog";
 import { ScrollArea } from "./ui/scroll-area";
 
-export interface HatDialogProps
+export interface AboutDialogProps
   extends React.ComponentPropsWithoutRef<typeof Dialog> {}
 
-const HatDialog = ({ ...props }: HatDialogProps) => {
+const AboutDialog = ({ ...props }: AboutDialogProps) => {
   const animationControls = useAnimation();
 
   useEffect(() => {
@@ -30,9 +29,6 @@ const HatDialog = ({ ...props }: HatDialogProps) => {
       });
     }
   }, [props.open]);
-
-  // 히스토리 1,2,3,4,5,6,7,8
-  //
 
   return (
     <Dialog {...props}>
@@ -49,7 +45,7 @@ const HatDialog = ({ ...props }: HatDialogProps) => {
           <DialogTitle hidden>허수깨비의 모자</DialogTitle>
           <DialogDescription hidden>허수깨비의 모자</DialogDescription>
           <motion.div
-            className="absolute inset-x-0 inset-y-0 bg-[radial-gradient(#38614D_0,#06021E_70%)]"
+            className="absolute inset-x-0 inset-y-0 bg-[radial-gradient(#5f5f5f_0,#06021E_70%)]"
             initial={{
               opacity: 0,
             }}
@@ -61,43 +57,30 @@ const HatDialog = ({ ...props }: HatDialogProps) => {
               <div className="flex max-w-[40rem] justify-center px-5">
                 <TabsList className="z-0 flex justify-center">
                   <TabsTrigger
-                    value="background"
+                    value="dokkebiworld"
                     className="px-4 text-[1rem] font-bold text-[#8ed3fb] data-[state=active]:text-[#12F085] data-[state=active]:underline md:text-xl"
                   >
-                    도깨비월드 설정
+                    도깨비월드
                   </TabsTrigger>
                   <TabsTrigger
-                    value="history"
+                    value="dokkebifest"
                     className="px-4 text-[1rem] font-bold text-[#8ed3fb] data-[state=active]:text-[#12F085] data-[state=active]:underline md:text-xl"
                   >
-                    히스토리
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="region"
-                    className="px-4 text-[1rem] font-bold text-[#8ed3fb] data-[state=active]:text-[#12F085] data-[state=active]:underline md:text-xl"
-                  >
-                    지역 설명
+                    도깨비 페스티벌 (2024)
                   </TabsTrigger>
                 </TabsList>
               </div>
-              <TabsContent value="background" asChild>
+              <TabsContent value="dokkebiworld" asChild>
                 <Content>
                   <div className="markdown pt-4">
-                    <Markdown>{backgroundMd}</Markdown>
+                    <Markdown>{dokkebiworldMd}</Markdown>
                   </div>
                 </Content>
               </TabsContent>
-              <TabsContent value="history" asChild>
+              <TabsContent value="dokkebifest" asChild>
                 <Content>
                   <div className="markdown">
-                    <Markdown>{historyMd}</Markdown>
-                  </div>
-                </Content>
-              </TabsContent>
-              <TabsContent value="region" asChild>
-                <Content>
-                  <div className="markdown">
-                    <Markdown>{regionMd}</Markdown>
+                    <Markdown>{dokkebifestMd}</Markdown>
                   </div>
                 </Content>
               </TabsContent>
@@ -139,4 +122,4 @@ const Content = ({ children }: ContentProps) => {
   );
 };
 
-export default HatDialog;
+export default AboutDialog;

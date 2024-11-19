@@ -140,5 +140,13 @@ body {
         @apply mb-2;
       }
     }
+
+    ul {
+      @apply list-disc pl-6;
+
+      li {
+        @apply mb-1;
+      }
+    }
   }
 }

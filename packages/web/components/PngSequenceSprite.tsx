@@ -10,7 +10,6 @@ export interface PngSequencePlayerProps
   sequence: string[];
   width: number;
   height: number;
-  blendMode?: PIXI.BLEND_MODES;
   anchor?: [number, number];
   fps?: number;
   x: number;
@@ -23,7 +22,6 @@ const PngSequencePlayer = ({
   height,
   fps = 24,
   anchor = [0.5, 0.5],
-  blendMode,
   ...rest
 }: PngSequencePlayerProps) => {
   const stageSize = useStageSize();
@@ -80,13 +78,7 @@ const PngSequencePlayer = ({
 
   return (
     <Container {...rest}>
-      <Sprite
-        texture={texture}
-        width={width}
-        height={height}
-        anchor={anchor}
-        blendMode={blendMode}
-      />
+      <Sprite texture={texture} width={width} height={height} anchor={anchor} />
     </Container>
   );
 };

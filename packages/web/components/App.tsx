@@ -5,6 +5,7 @@ import { MapConfigsContext, MapConfigsProvider } from "@/contexts/map-configs";
 import { useContextBridge } from "@/hooks/useContextBridge";
 import clubImage from "@/public/club.png";
 import hatImage from "@/public/hat.png";
+import logoImage from "@/public/logo.svg";
 import { useMapConfigsSuspenseQuery } from "@/queries/map-configs";
 import { isAppStartedAtom, selectedVideoIndexAtom } from "@/stores/map";
 import { cn } from "@/utils/ui";
@@ -13,11 +14,11 @@ import { Portal } from "@radix-ui/react-portal";
 import { useAtom, useAtomValue } from "jotai";
 import Image from "next/image";
 import * as PIXI from "pixi.js";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import AboutDialog from "./\bAboutDialog";
 import BackgroundSoundProvider, {
   useBackgroundSound,
 } from "./BackgroundSoundProvider";
-import { BangRef } from "./Bang";
 import Camera from "./Camera";
 import HatDialog from "./HatDialog";
 import MapAssets from "./MapAssets";
@@ -74,7 +75,6 @@ const App = ({}: AppProps) => {
     selectedVideoIndexAtom,
   );
   const { data: mapConfigsData } = useMapConfigsSuspenseQuery();
-  const bangRef = useRef<BangRef>(null);
   const resources = useMemo(() => {
     return [
       ...RESOURCES,
@@ -86,6 +86,7 @@ const App = ({}: AppProps) => {
   const [selectedMobInventoryNo, setSelectedMobInventoryNo] =
     useState<string>();
   const [showHatDialog, setShowHatDialog] = useState(false);
+  const [showAboutDialog, setShowAboutDialog] = useState(false);
 
   return (
     <MapConfigsProvider value={mapConfigsData}>
@@ -112,14 +113,36 @@ const App = ({}: AppProps) => {
           setSelectedMobInventoryNo(undefined);
         }}
       />
-      <HatDialog open={showHatDialog} />
+      <HatDialog open={showHatDialog} onOpenChange={setShowHatDialog} />
+      <AboutDialog open={showAboutDialog} onOpenChange={setShowAboutDialog} />
       {isAppStarted && !selectedMobInventoryNo && (
         <>
-          <MobileController />
+          <MobileController />\
           {!showHatDialog && (
             <Portal container={document.documentElement}>
+              <div className="pointer-events-none fixed inset-x-0 top-6 z-[100] flex justify-center">
+                <button
+                  className="pointer-events-auto h-6 transition-transform active:scale-90 lg:h-8 canhover:hover:scale-90"
+                  type="button"
+                  onClick={(e) => {
+                    setShowAboutDialog((prev) => !prev);
+                  }}
+                >
+                  <Image
+                    className={cn("h-full w-full transition-transform")}
+                    src={logoImage}
+                    alt="About Dokkebi World"
+                    height={40}
+                    unoptimized
+                  />
+                </button>
+              </div>
+            </Portal>
+          )}
+          {!showHatDialog && !showAboutDialog && (
+            <Portal container={document.documentElement}>
               <a
-                className="scale-1 canhover:hover:scale-90 group fixed left-10 z-[100] aspect-square h-[4.625rem] w-[4.625rem] overflow-hidden rounded-full bg-[radial-gradient(white_0%,#FFF538_60%)] p-2 transition-transform bottom-safe-offset-12 active:scale-90 lg:h-[6.25rem] lg:w-[6.25rem]"
+                className="scale-1 group fixed left-10 z-[100] aspect-square h-[4.625rem] w-[4.625rem] overflow-hidden rounded-full bg-[radial-gradient(white_0%,#FFF538_60%)] p-2 transition-transform bottom-safe-offset-12 active:scale-90 lg:h-[6.25rem] lg:w-[6.25rem] canhover:hover:scale-90"
                 type="button"
                 target="_blank"
                 href="/archive"
@@ -138,31 +161,33 @@ const App = ({}: AppProps) => {
               </a>
             </Portal>
           )}
-          <Portal container={document.documentElement}>
-            <button
-              className={cn(
-                "scale-1 canhover:hover:scale-90 fixed right-10 z-[100] aspect-square h-[4.625rem] w-[4.625rem] overflow-hidden rounded-full bg-[radial-gradient(white_0%,#FFF538_60%)] p-2 transition-transform bottom-safe-offset-12 active:scale-90 lg:h-[6.25rem] lg:w-[6.25rem]",
-                showHatDialog &&
-                  "bg-[radial-gradient(#ffffff57_0%,#fff53854_60%)] shadow-[0_0_20px_5px_#fff53878]",
-              )}
-              type="button"
-              onClick={(e) => {
-                setShowHatDialog((prev) => !prev);
-              }}
-            >
-              <Image
+          {!showAboutDialog && (
+            <Portal container={document.documentElement}>
+              <button
                 className={cn(
-                  "h-full w-full transition-transform",
-                  showHatDialog && "rotate-180",
+                  "scale-1 fixed right-10 z-[100] aspect-square h-[4.625rem] w-[4.625rem] overflow-hidden rounded-full bg-[radial-gradient(white_0%,#FFF538_60%)] p-2 transition-transform bottom-safe-offset-12 active:scale-90 lg:h-[6.25rem] lg:w-[6.25rem] canhover:hover:scale-90",
+                  showHatDialog &&
+                    "bg-[radial-gradient(#ffffff57_0%,#fff53854_60%)] shadow-[0_0_20px_5px_#fff53878]",
                 )}
-                src={hatImage}
-                alt="허수깨비 모자"
-                width={100}
-                height={100}
-                unoptimized
-              />
-            </button>
-          </Portal>
+                type="button"
+                onClick={(e) => {
+                  setShowHatDialog((prev) => !prev);
+                }}
+              >
+                <Image
+                  className={cn(
+                    "h-full w-full transition-transform",
+                    showHatDialog && "rotate-180",
+                  )}
+                  src={hatImage}
+                  alt="허수깨비 모자"
+                  width={100}
+                  height={100}
+                  unoptimized
+                />
+              </button>
+            </Portal>
+          )}
         </>
       )}
       {selectedVideoIndex !== undefined && (
